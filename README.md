@@ -56,8 +56,8 @@
 * GameManager.cs - 씬 데이터 유지
 * AnomalyManager.cs -   확률 기반 변칙 생성 (난수 생성 관리)
 * StageEndTrigger.cs - 스테이지 성공/실패 판정 로직
-* AnomalyManager.cs - 이상현상 해결 로직
 * UISettings.cs - UI 관련 작업
+* AnomalyObject.cs - 변수에 부착하여 이상현상 부여, 이상현상 물체 해결 확인
 * 환경 연출 (번개, 귀신 등장 로직)
 
 ### 5.2. 🗺️ 맵 구성
