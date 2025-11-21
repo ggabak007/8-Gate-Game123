@@ -46,7 +46,7 @@ public class StageEndTrigger : MonoBehaviour
             entryPosition = player.position; // 진입 위치 저장
             isTriggerActive = true;
             // 디버깅 코드
-            // Debug.Log("스테이지 끝 트리거 진입. 판단 대기.");
+            // Debug.Log("스테이지 끝 트리거");
         }
     }
 
@@ -71,7 +71,7 @@ public class StageEndTrigger : MonoBehaviour
     {
         // 씬 진행 방향 (복도의 Z축 방향이라고 가정) , 맵 구현시 수정 가능성 있음
         // 플레이어가 앞으로 전진했는지 뒤로 돌아갔는지 판단
-        // 복도 끝을 향하는 방향을 Positive Z로 가정
+        // 복도 끝을 향하는 방향을 +Z로 가정
 
         bool movedForward = exit.z > entry.z;
         bool movedBackward = exit.z < entry.z;
@@ -82,17 +82,17 @@ public class StageEndTrigger : MonoBehaviour
 
         bool success = false;
 
-        // 1. [성공 조건 A] 이상 현상 O: 해결했고, 뒤로 돌아감
+        // 1. 이상 현상 O: 해결했고, 뒤로 돌아감
         if (anomalyPresent && anomalySolved && movedBackward)
         {
             success = true;
-            Debug.Log("SUCCESS A: 변칙 해결 후 되돌아감.");
+            // 디버깅용 코드  Debug.Log("이상현상 해결 후 되돌아감.");
         }
-        // 2. [성공 조건 B] 이상 현상 X: 해결 시도 없이, 앞으로 전진함
+        // 2.이상 현상 X: 해결 시도 없이, 앞으로 전진함
         else if (!anomalyPresent && !anomalySolved && movedForward)
         {
             success = true;
-            Debug.Log("SUCCESS B: 변칙 없음 인지 후 전진.");
+            // 디버깅용 코드 Debug.Log("이상현상 없음 인지 후 전진.");
         }
 
         // 최종 결과 처리
@@ -100,13 +100,13 @@ public class StageEndTrigger : MonoBehaviour
         {
             // 성공 시 다음 스테이지로 이동 , 스테이지 설계에 따라 구현
             // SceneLoader.Instance.LoadNextStage(); 
-            Debug.Log("스테이지 통과 성공! 다음 씬으로 이동.");
+            // 디버깅용 코드 Debug.Log("스테이지 통과 성공! 다음 씬으로 이동.");
         }
         else
         {
             // 실패 시 1 스테이지로 강제 리셋
             // SceneLoader.Instance.ResetToStage1();
-            Debug.LogWarning("FAIL! 로직 위반 또는 변칙 미해결. Stage 1로 리셋!");
+            // 디버깅용 코드 Debug.LogWarning("FAIL! 로직 위반 또는 변칙 미해결. Stage 1로 리셋!");
         }
     }
 }
