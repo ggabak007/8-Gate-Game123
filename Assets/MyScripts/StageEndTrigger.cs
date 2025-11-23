@@ -71,7 +71,7 @@ public class StageEndTrigger : MonoBehaviour
     {
         // 씬 진행 방향 (복도의 Z축 방향이라고 가정) , 맵 구현시 수정 가능성 있음
         // 플레이어가 앞으로 전진했는지 뒤로 돌아갔는지 판단
-        // 복도 끝을 향하는 방향을 +Z로 가정
+        // 복도 끝을 향하는 방향을 +Z로 가정 , 방향 다를시 수정필요
 
         bool movedForward = exit.z > entry.z;
         bool movedBackward = exit.z < entry.z;
@@ -98,15 +98,18 @@ public class StageEndTrigger : MonoBehaviour
         // 최종 결과 처리
         if (success)
         {
-            // 성공 시 다음 스테이지로 이동 , 스테이지 설계에 따라 구현
-            // SceneLoader.Instance.LoadNextStage(); 
-            // 디버깅용 코드 Debug.Log("스테이지 통과 성공! 다음 씬으로 이동.");
+            // SceneLoader.Instance.LoadNextStage(); // 이전 오류 코드
+            GameManager.Instance.GoToNextStage(); // GameManager의 함수 호출
+            Debug.Log("스테이지 통과 성공! 다음 씬으로 이동.");
         }
         else
         {
-            // 실패 시 1 스테이지로 강제 리셋
-            // SceneLoader.Instance.ResetToStage1();
-            // 디버깅용 코드 Debug.LogWarning("FAIL! 로직 위반 또는 변칙 미해결. Stage 1로 리셋!");
+            // SceneLoader.Instance.ResetToStage1(); // 이전 오류 코드
+            GameManager.Instance.ResetToStage1(); // GameManager의 함수 호출
+            Debug.LogWarning("FAIL! 로직 위반 또는 변칙 미해결. Stage 1로 리셋!");
         }
     }
 }
+
+// 스테이지를 넘어가는 지점(빈틈없이)에 지정. 문 여는 방식일시 문열릴떄 작동하도록 함. Is Trigger 체크, Renderer 끄기 설정 필요
+//AnomalyManger연결, Player에 연결 해야함(혹은 find사용으로 플레이어를 찾도록 구현)

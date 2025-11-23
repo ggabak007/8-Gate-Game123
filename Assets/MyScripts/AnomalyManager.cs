@@ -20,8 +20,6 @@ public class AnomalyManager : MonoBehaviour
 
     public void InitializeStage()
     {
-        // 플레이어가 이상현상을 해결했는지 확인하는 함수
-        Is_Anomaly_Solved = false;
 
         // 확률 계산 (75% 확률로 이상현상 발생)
         int randomValue = Random.Range(0, 100);
