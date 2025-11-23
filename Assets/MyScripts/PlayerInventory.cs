@@ -3,7 +3,7 @@
 public class PlayerInventory : MonoBehaviour
 {
     private AnomalyManager anomalyManager;
-    private SceneLoader sceneLoader;
+    // 씬 하나만 사용하여 삭제 private SceneLoader sceneLoader;
     //플레이어가 소지한 도구
     public ToolType currentTool = ToolType.None;
 
@@ -14,8 +14,8 @@ public class PlayerInventory : MonoBehaviour
     private GameObject heldToolObject = null;
     void Start()
     {
-        anomalyManager = FindObjectOfType<AnomalyManager>();
-        sceneLoader = FindObjectOfType<SceneLoader>();
+        anomalyManager = FindFirstObjectByType<AnomalyManager>();
+        // 씬 하나만 사용하여 삭제 sceneLoader =FindFirstObjectByType<SceneLoader>();
     }
     void Update()
     {
@@ -41,7 +41,7 @@ public class PlayerInventory : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, interactDistance))
         {
             // 상호작용한 도구가 'InteractableTool' 컴포넌트를 가지고 있는지 확인
-            Tools tool = hit.collider.GetComponent<InteractableTool>();
+            InteractableTool tool = hit.collider.GetComponent<InteractableTool>();
 
             if (tool != null)
             {
@@ -55,7 +55,7 @@ public class PlayerInventory : MonoBehaviour
                 anomaly.TrySolveAnomaly(this);
                 return;
             }
-            }
+         }
     }
 
     private void SwitchTool(InteractableTool newTool)

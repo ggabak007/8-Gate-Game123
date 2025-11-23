@@ -1,115 +1,99 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement; 
 
 public class StageEndTrigger : MonoBehaviour
 {
-    // ====== 1. 외부 변수 및 레퍼런스 ======
+    // ====== 1. 설정 ======
+    public enum TriggerType
+    {
+        ExitDoor,   // 복도 끝 (출구)
+        ReturnDoor  // 복도 시작 (되돌아감)
+    }
 
-    // AnomalyManager 인스턴스 (현재 스테이지의 변칙 정보를 가져옴)
-    // 실제 프로젝트에서는 Singleton 패턴 등으로 접근하는 것이 효율적입니다.
+    [Header("설정")]
+    [Tooltip("이 트리거가 출구입니까, 아니면 되돌아가는 곳입니까?")]
+    public TriggerType triggerType = TriggerType.ExitDoor;
+
+    // ====== 2. 외부 레퍼런스 ======
     private AnomalyManager anomalyManager;
-
-    // 플레이어 
-    public Transform player;
-
-    // 플레이어의 위치
-    private Vector3 entryPosition;
-
-    // 트리거 활성화 플래그 (중복 판정 방지)
-    private bool isTriggerActive = false;
-
-    // ====== 2. 초기화 ======
 
     void Start()
     {
-        // 씬 로드 시 AnomalyManager 인스턴스를 찾아 연결
-        anomalyManager = FindObjectOfType<AnomalyManager>();
-        if (anomalyManager == null)
-        {
-            Debug.LogError("AnomalyManager를 찾을 수 없습니다! 로직 구현 불가.");
-        }
+        anomalyManager = FindFirstObjectByType<AnomalyManager>();
+        if (anomalyManager == null) Debug.LogError("AnomalyManager가 없습니다!");
+    }
 
-        // 플레이어 오브젝트 연결 (Inspector에서 연결하거나, 태그로 찾습니다)
-        if (player == null)
+    // ====== 3. 트리거 진입 로직 ======
+    // 플레이어가 트리거에 닿는 순간 바로 판정합니다. (Exit 로직보다 훨씬 안전함)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
         {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            CheckCompletion();
         }
     }
 
-    // ====== 3. 트리거 진입/탈출 로직 ======
-
-    private void OnTriggerEnter(Collider other) // 트리거 진입
+    // ====== 4. 핵심 판정 로직 ======
+    private void CheckCompletion()
     {
-        // 플레이어가 진입했는지 확인
-        if (other.CompareTag("Player") && !isTriggerActive)
+        // 현재 상황 가져오기
+        bool hasAnomaly = anomalyManager.Is_Anomaly_Present; // 이상현상 있음?
+        bool isSolved = anomalyManager.Is_Anomaly_Solved;    // 해결함?
+
+        // 성공 여부 판단
+        bool isSuccess = false;
+
+        // [상황 A] 출구(ExitDoor)에 도착했을 때
+        if (triggerType == TriggerType.ExitDoor)
         {
-            entryPosition = player.position; // 진입 위치 저장
-            isTriggerActive = true;
-            // 디버깅 코드
-            // Debug.Log("스테이지 끝 트리거");
+            // 정답: 이상현상이 없을 때(Normal)만 통과 가능
+            // (혹은 이상현상이 있었는데 해결하고 오는 건 Return이 아니라 전진인가요? 
+            // 보통 8번출구는 해결 후에도 '원래 길'로 가야 하니 여기서는 '없을 때'만 성공으로 칩니다.)
+
+            if (!hasAnomaly)
+            {
+                isSuccess = true;
+                Debug.Log("[정상] 출구 통과 성공!");
+            }
+            else
+            {
+                // 이상현상이 있는데 출구로 옴 -> 실패
+                Debug.LogWarning("[실패] 이상현상이 있는데 출구로 옴!");
+                isSuccess = false;
+            }
         }
-    }
-
-    private void OnTriggerExit(Collider other) // 트리거 탈출
-    {
-        // 플레이어가 트리거를 완전히 벗어났을 때 최종 판정 실행
-        if (other.CompareTag("Player") && isTriggerActive)
+        // [상황 B] 되돌아가는 문(ReturnDoor)에 도착했을 때
+        else if (triggerType == TriggerType.ReturnDoor)
         {
-            isTriggerActive = false;
-
-            // 플레이어가 벗어난 위치
-            Vector3 exitPosition = player.position;
-
-            // 이동 방향 판단 및 최종 로직 실행
-            CheckStageCompletion(entryPosition, exitPosition);
-        }
-    }
-
-    // ====== 4. 핵심 판정 로직 (역방향 성공 로직) ======
-
-    private void CheckStageCompletion(Vector3 entry, Vector3 exit)
-    {
-        // 씬 진행 방향 (복도의 Z축 방향이라고 가정) , 맵 구현시 수정 가능성 있음
-        // 플레이어가 앞으로 전진했는지 뒤로 돌아갔는지 판단
-        // 복도 끝을 향하는 방향을 +Z로 가정 , 방향 다를시 수정필요
-
-        bool movedForward = exit.z > entry.z;
-        bool movedBackward = exit.z < entry.z;
-
-        // 이상현상 유무 및 해결 여부 확인
-        bool anomalyPresent = anomalyManager.Is_Anomaly_Present; // AnomalyManager에서 가져옴
-        bool anomalySolved = anomalyManager.Is_Anomaly_Solved;   // AnomalyManager에서 가져옴
-
-        bool success = false;
-
-        // 1. 이상 현상 O: 해결했고, 뒤로 돌아감
-        if (anomalyPresent && anomalySolved && movedBackward)
-        {
-            success = true;
-            // 디버깅용 코드  Debug.Log("이상현상 해결 후 되돌아감.");
-        }
-        // 2.이상 현상 X: 해결 시도 없이, 앞으로 전진함
-        else if (!anomalyPresent && !anomalySolved && movedForward)
-        {
-            success = true;
-            // 디버깅용 코드 Debug.Log("이상현상 없음 인지 후 전진.");
+            // 정답: 이상현상이 있고 + 해결했을 때 통과 가능
+            if (hasAnomaly && isSolved)
+            {
+                isSuccess = true;
+                Debug.Log("[해결] 이상현상 해결 후 복귀 성공!");
+            }
+            // (변형 룰) 만약 '발견만 하고 도망쳐도 성공'이라면 && isSolved를 빼면 됨
+            else if (hasAnomaly && !isSolved)
+            {
+                Debug.LogWarning("[실패] 이상현상을 해결하지 않고 도망침!");
+                isSuccess = false;
+            }
+            else
+            {
+                // 이상현상도 없는데 돌아옴 -> 실패
+                Debug.LogWarning("[실패] 아무것도 없는데 돌아옴!");
+                isSuccess = false;
+            }
         }
 
-        // 최종 결과 처리
-        if (success)
+        // 결과 처리
+        if (isSuccess)
         {
-            // SceneLoader.Instance.LoadNextStage(); // 이전 오류 코드
-            GameManager.Instance.GoToNextStage(); // GameManager의 함수 호출
-            Debug.Log("스테이지 통과 성공! 다음 씬으로 이동.");
+            GameManager.Instance.GoToNextStage();
         }
         else
         {
-            // SceneLoader.Instance.ResetToStage1(); // 이전 오류 코드
-            GameManager.Instance.ResetToStage1(); // GameManager의 함수 호출
-            Debug.LogWarning("FAIL! 로직 위반 또는 변칙 미해결. Stage 1로 리셋!");
+            GameManager.Instance.ResetToStage1();
         }
     }
 }
 
-// 스테이지를 넘어가는 지점(빈틈없이)에 지정. 문 여는 방식일시 문열릴떄 작동하도록 함. Is Trigger 체크, Renderer 끄기 설정 필요
-//AnomalyManger연결, Player에 연결 해야함(혹은 find사용으로 플레이어를 찾도록 구현)
+// 맵 시작과 끝에 투명블록 설치해야함

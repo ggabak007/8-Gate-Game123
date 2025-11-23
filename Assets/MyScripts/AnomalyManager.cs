@@ -1,54 +1,91 @@
 ﻿using UnityEngine;
+// using System.Collections.Generic; // 리스트를 쓸 경우 필요
 
 public class AnomalyManager : MonoBehaviour
 {
-    public bool Is_Anomaly_Present { get; private set; } = false; // 이상현상이 존재하는지
-    public bool Is_Anomaly_Solved { get; set; } = false; // 플레이어가 이상현상을 해결했는지
+    // [설정] 외부에서 읽을 수는 있지만(get), 맘대로 바꿀 순 없음(private set)
+    public bool Is_Anomaly_Present { get; private set; } = false;
+    public bool Is_Anomaly_Solved { get; set; } = false;
 
-    // 현재 씬에 있는 모든 잠재적 이상현상 오브젝트 (인스펙터에서 연결) - 각각의 코드로 작성후 연결
+    [Header("설정")]
+    // 인스펙터에서 이상현상 오브젝트들(귀신, 피, 의자 등)을 여기에 다 넣으세요
     public GameObject[] anomalyObjects;
 
-    // 확률 상수: 0~100 사이, 75 미만이면 이상현상 발생 (75% 확률)
+    // 75 미만이면 이상현상 발생 (즉, 75% 확률로 발생)
     private const int ANOMALY_THRESHOLD = 75;
+
+    // 현재 켜져있는 이상현상을 기억하는 변수
+    private GameObject currentActiveAnomaly = null;
 
     void Start()
     {
-        InitializeStage();
+        // 게임 시작 시 초기화
+        ResetStage();
     }
 
-    //1. 스테이지 초기화 및 확률 계산 
-
-    public void InitializeStage()
+    // 1. 스테이지 초기화 (다음 날로 넘어갈 때도 이 함수를 부르면 됨)
+    public void ResetStage()
     {
+        // (1) 기존 상태 초기화
+        Is_Anomaly_Solved = false;
 
-        // 확률 계산 (75% 확률로 이상현상 발생)
-        int randomValue = Random.Range(0, 100);
-
-        if (randomValue < ANOMALY_THRESHOLD) // 75%확률로 이상현상 발생
+        // 켜져있던 이상현상이 있다면 끄기
+        if (currentActiveAnomaly != null)
         {
-            Is_Anomaly_Present = true;
-            // 디버깅용 코드 Debug.Log("AnomalyManager: [변칙 발생] - 확률값: " + randomValue);
-        }
-        else //25%확률로 스테이지 그냥 진행
-        {
-            Is_Anomaly_Present = false;
-            // 디버깅용 코드 Debug.Log("AnomalyManager: [정상] - 확률값: " + randomValue);
+            currentActiveAnomaly.SetActive(false);
+            currentActiveAnomaly = null;
         }
 
-        // 오브젝트 활성화/비활성화 적용
-        SetAnomalyObjectState(Is_Anomaly_Present);
-    }
-
-    // 2. 이상현상 오브젝트 상태 설정 
-    private void SetAnomalyObjectState(bool isActive)
-    {
+        // 혹시 모르니 모든 이상현상 끄기 (안전장치)
         if (anomalyObjects != null)
         {
-            foreach (GameObject obj in anomalyObjects)
+            foreach (var obj in anomalyObjects)
             {
-                // 이상현상이 존재하면 오브젝트를 활성화,아니면 비활성화
-                obj.SetActive(isActive);
+                if (obj != null) obj.SetActive(false);
             }
+        }
+
+        // (2) 확률 계산
+        CalculateAnomalyChance();
+    }
+
+    private void CalculateAnomalyChance()
+    {
+        int randomValue = Random.Range(0, 100);
+
+        if (randomValue < ANOMALY_THRESHOLD)
+        {
+            // [이상현상 발생!]
+            Is_Anomaly_Present = true;
+            SpawnRandomAnomaly(); // 하나만 골라서 켜기
+            Debug.Log($"<color=red>[변칙 발생!] 확률값: {randomValue}</color>");
+        }
+        else
+        {
+            // [정상]
+            Is_Anomaly_Present = false;
+            Debug.Log($"<color=green>[정상 스테이지] 확률값: {randomValue}</color>");
+        }
+    }
+
+    // 2. 랜덤으로 하나만 골라서 켜는 함수 (코드의 문제점 수정)
+    private void SpawnRandomAnomaly()
+    {
+        if (anomalyObjects == null || anomalyObjects.Length == 0)
+        {
+            Debug.LogWarning("AnomalyManager: 할당된 이상현상 오브젝트가 없습니다!");
+            return;
+        }
+
+        // 배열 중에서 랜덤하게 하나 뽑기
+        int randomIndex = Random.Range(0, anomalyObjects.Length);
+
+        currentActiveAnomaly = anomalyObjects[randomIndex];
+
+        if (currentActiveAnomaly != null)
+        {
+            currentActiveAnomaly.SetActive(true);
+            Debug.Log($"활성화된 이상현상: {currentActiveAnomaly.name}");
         }
     }
 
@@ -58,8 +95,10 @@ public class AnomalyManager : MonoBehaviour
         if (Is_Anomaly_Present)
         {
             Is_Anomaly_Solved = true;
-            // 디버깅용 코드 Debug.Log("AnomalyManager: 이상현상 해결 완료");
+            Debug.Log("AnomalyManager: 플레이어가 이상현상을 해결했습니다!");
 
-            // 만약 귀신 등장을 원하면  if문을 사용해 해결후 바로 등장하게 설정
+            // (선택사항) 해결되자마자 눈앞에서 사라지게 하고 싶으면 아래 주석 해제
+            // if (currentActiveAnomaly != null) currentActiveAnomaly.SetActive(false);
         }
     }
+} // (코드의 문제점 수정)

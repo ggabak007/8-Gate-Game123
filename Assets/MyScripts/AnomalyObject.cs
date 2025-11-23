@@ -15,8 +15,8 @@ public class AnomalyObject : MonoBehaviour
     void Start()
     {
         // 필요 인스턴스 연결
-        anomalyManager = FindObjectOfType<AnomalyManager>();
-        playerInventory = FindObjectOfType<PlayerInventory>();
+        anomalyManager = FindFirstObjectByType< AnomalyManager>();
+        playerInventory = FindFirstObjectByType< PlayerInventory>();
 
         if (anomalyManager == null || playerInventory == null)
         {
