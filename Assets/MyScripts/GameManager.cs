@@ -5,14 +5,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("게임 상태")]
     public int currentStageIndex = 1; // 현재 날짜 (1일차)
     public int maxDays = 4;           // 목표 (4일차)
 
-    [Header("연결 필수!")]
     public Transform startPoint;      // 플레이어가 돌아올 위치 (StartPoint)
-    public GameObject player;         // 플레이어 오브젝트
-    public AnomalyManager anomalyManager; // 이상현상 관리자
+    public GameObject player;
+
+    //private AnomalyManager anomalyManager; // 코드에서 찾아 연결
+    //private PlayerInventory playerInventory;
 
     private void Awake()
     {
@@ -20,30 +20,50 @@ public class GameManager : MonoBehaviour
         else { Destroy(gameObject); }
     }
 
-    void Start()
+    void Start() 
     {
-<<<<<<< Updated upstream
-        // 게임 시작하자마자 1일차 세팅 실행
         StartNewDay();
-=======
-        sceneLoader = FindFirstObjectByType<SceneLoader>();
-        if (sceneLoader == null)
-        {
-            Debug.LogError("SceneLoader를 찾을 수 없습니다! 씬 전환 불가.");
-        }
->>>>>>> Stashed changes
     }
+
+    /*
+    private void FindAndConnectManagers()
+    {
+        // AnomalyManager를 씬 내에서 찾습니다.
+        anomalyManager = FindFirstObjectByType<AnomalyManager>();
+
+        // PlayerInventory는 Start()에서 player를 Inspector로 연결했다는 가정 하에 GetComponent로 가져옵니다.
+        if (player != null)
+        {
+            playerInventory = player.GetComponent<PlayerInventory>();
+        }
+
+        // SceneLoader는 더 이상 필요 없지만, 필요시 참조 유지 가능
+
+        if (anomalyManager == null || playerInventory == null)
+        {
+            Debug.LogError("GameManager: 필수 매니저/컴포넌트(Anomaly/Inventory)를 찾을 수 없습니다.");
+        }
+
+        // Inspector에 player와 playerStartPoint가 연결되어 있는지 확인
+        if (player == null || playerStartPoint == null)
+        {
+            Debug.LogError("GameManager: Player 또는 Player Start Point를 Inspector에서 연결해야 합니다.");
+        }
+    }
+
+    */
 
     // [핵심] 씬 로딩 없이, 위치만 옮겨서 하루를 시작하는 함수
     public void StartNewDay()
     {
-        // 1. 이상현상 랜덤 배치 (AnomalyManager에게 시킴)
+        /* 이상현상 랜덤 배치 (AnomalyManager에게 시킴)
         if (anomalyManager != null)
         {
             anomalyManager.ResetStage();
         }
+        */
 
-        // 2. 플레이어 위치를 시작점으로 강제 이동
+        // 플레이어 위치를 시작점으로 강제 이동
         if (player != null && startPoint != null)
         {
             // (중요) CharacterController가 켜져 있으면 강제 이동이 안 될 때가 있음
@@ -56,7 +76,7 @@ public class GameManager : MonoBehaviour
             if (cc != null) cc.enabled = true; // 다시 켬
         }
 
-        Debug.Log($"{currentStageIndex}일차 시작!");
+        Debug.Log($"{currentStageIndex}일차");
     }
 
     // 다음 단계(다음 날)로 이동
