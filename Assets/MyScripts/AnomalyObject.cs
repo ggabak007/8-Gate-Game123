@@ -15,13 +15,10 @@ public class AnomalyObject : MonoBehaviour
     void Start()
     {
         // 필요 인스턴스 연결
-<<<<<<< Updated upstream:Assets/MyScripts/AnomalyObject.cs
         anomalyManager = FindFirstObjectByType< AnomalyManager>();
         playerInventory = FindFirstObjectByType< PlayerInventory>();
-=======
         anomalyManager = FindFirstObjectByType<AnomalyManager>();
         playerInventory = FindFirstObjectByType<PlayerInventory>();
->>>>>>> Stashed changes:Assets/Future/AnomalyObject.cs
 
         if (anomalyManager == null || playerInventory == null)
         {
