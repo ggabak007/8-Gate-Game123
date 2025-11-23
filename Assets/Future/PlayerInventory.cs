@@ -15,7 +15,11 @@ public class PlayerInventory : MonoBehaviour
     void Start()
     {
         anomalyManager = FindFirstObjectByType<AnomalyManager>();
+<<<<<<< Updated upstream:Assets/MyScripts/PlayerInventory.cs
         // 씬 하나만 사용하여 삭제 sceneLoader =FindFirstObjectByType<SceneLoader>();
+=======
+        sceneLoader = FindFirstObjectByType<SceneLoader>();
+>>>>>>> Stashed changes:Assets/Future/PlayerInventory.cs
     }
     void Update()
     {
@@ -41,7 +45,11 @@ public class PlayerInventory : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, interactDistance))
         {
             // 상호작용한 도구가 'InteractableTool' 컴포넌트를 가지고 있는지 확인
+<<<<<<< Updated upstream:Assets/MyScripts/PlayerInventory.cs
             InteractableTool tool = hit.collider.GetComponent<InteractableTool>();
+=======
+            Tools tool = hit.collider.GetComponent<Tools>();
+>>>>>>> Stashed changes:Assets/Future/PlayerInventory.cs
 
             if (tool != null)
             {
@@ -58,7 +66,7 @@ public class PlayerInventory : MonoBehaviour
          }
     }
 
-    private void SwitchTool(InteractableTool newTool)
+    private void SwitchTool(Tools newTool)
     {
         // 1. 현재 도구가 있다면 (스위칭)
         if (currentTool != ToolType.None)

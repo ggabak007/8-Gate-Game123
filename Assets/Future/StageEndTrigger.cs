@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream:Assets/MyScripts/StageEndTrigger.cs
 ﻿using UnityEngine;
+=======
+﻿/* using UnityEngine;
+using UnityEngine.SceneManagement; 
+>>>>>>> Stashed changes:Assets/Future/StageEndTrigger.cs
 
 public class StageEndTrigger : MonoBehaviour
 {
@@ -18,9 +23,18 @@ public class StageEndTrigger : MonoBehaviour
 
     void Start()
     {
+<<<<<<< Updated upstream:Assets/MyScripts/StageEndTrigger.cs
         anomalyManager = FindFirstObjectByType<AnomalyManager>();
         if (anomalyManager == null) Debug.LogError("AnomalyManager가 없습니다!");
     }
+=======
+        // 씬 로드 시 AnomalyManager 인스턴스를 찾아 연결
+        anomalyManager = FindFirstObjectByType<AnomalyManager>();
+        if (anomalyManager == null)
+        {
+            Debug.LogError("AnomalyManager를 찾을 수 없습니다! 로직 구현 불가.");
+        }
+>>>>>>> Stashed changes:Assets/Future/StageEndTrigger.cs
 
     // ====== 3. 트리거 진입 로직 ======
     // 플레이어가 트리거에 닿는 순간 바로 판정합니다. (Exit 로직보다 훨씬 안전함)
@@ -95,5 +109,6 @@ public class StageEndTrigger : MonoBehaviour
         }
     }
 }
+*/
 
 // 맵 시작과 끝에 투명블록 설치해야함

@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream:Assets/MyScripts/AnomalyManager.cs
 ﻿using UnityEngine;
 // using System.Collections.Generic; // 리스트를 쓸 경우 필요
+=======
+﻿/* using UnityEngine;
+>>>>>>> Stashed changes:Assets/Future/AnomalyManager.cs
 
 public class AnomalyManager : MonoBehaviour
 {
@@ -101,4 +105,10 @@ public class AnomalyManager : MonoBehaviour
             // if (currentActiveAnomaly != null) currentActiveAnomaly.SetActive(false);
         }
     }
+<<<<<<< Updated upstream:Assets/MyScripts/AnomalyManager.cs
 } // (코드의 문제점 수정)
+=======
+}
+
+*/
+>>>>>>> Stashed changes:Assets/Future/AnomalyManager.cs

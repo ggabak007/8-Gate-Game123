@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/* using UnityEngine;
 
 [RequireComponent(typeof(Collider))] //콜라이더 자동 추가
 public class AnomalyObject : MonoBehaviour
@@ -15,8 +15,13 @@ public class AnomalyObject : MonoBehaviour
     void Start()
     {
         // 필요 인스턴스 연결
+<<<<<<< Updated upstream:Assets/MyScripts/AnomalyObject.cs
         anomalyManager = FindFirstObjectByType< AnomalyManager>();
         playerInventory = FindFirstObjectByType< PlayerInventory>();
+=======
+        anomalyManager = FindFirstObjectByType<AnomalyManager>();
+        playerInventory = FindFirstObjectByType<PlayerInventory>();
+>>>>>>> Stashed changes:Assets/Future/AnomalyObject.cs
 
         if (anomalyManager == null || playerInventory == null)
         {
@@ -71,6 +76,8 @@ public class AnomalyObject : MonoBehaviour
         }
     }
 
+
+
     // 이상현상 해결시 실행되는 연출 함수 ( 추가 구현 필요 )
     private void ExecuteAnomalyFix()
     {
@@ -83,3 +90,5 @@ public class AnomalyObject : MonoBehaviour
         
     }
 }
+
+*/

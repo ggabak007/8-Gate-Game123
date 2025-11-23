@@ -22,8 +22,16 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+<<<<<<< Updated upstream
         // 게임 시작하자마자 1일차 세팅 실행
         StartNewDay();
+=======
+        sceneLoader = FindFirstObjectByType<SceneLoader>();
+        if (sceneLoader == null)
+        {
+            Debug.LogError("SceneLoader를 찾을 수 없습니다! 씬 전환 불가.");
+        }
+>>>>>>> Stashed changes
     }
 
     // [핵심] 씬 로딩 없이, 위치만 옮겨서 하루를 시작하는 함수

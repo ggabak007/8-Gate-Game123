@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
             forward.Normalize();
             right.Normalize();
 
+<<<<<<< Updated upstream
             // 방향 계산
             Vector3 moveInput = (forward * z + right * x);
             if (moveInput.magnitude > 1) moveInput.Normalize();
@@ -91,6 +92,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 moveDirection.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
+=======
+            // 지면에 붙어있게 하기 위해 중력 적용
+            moveDirection.y = gravity;
+        }
+        else
+        {
+            // 공중에 있을 때 (떨어질 때)는 중력만 지속적으로 적용
+            moveDirection.y += gravity * Time.deltaTime;
+>>>>>>> Stashed changes
         }
 
         // 중력 적용 (공중이든 땅이든 항상 적용)
@@ -116,4 +126,19 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+
+
+//맵에 연결할 부분
+
+//스크립트 부착: 이 PlayerMovement.cs 스크립트를 플레이어에 연결
+
+//컴포넌트 추가: 플레이어 오브젝트에 CharacterController와 AudioSource 컴포넌트 추가
+
+//카메라 설정: 메인 카메라를 플레이어 오브젝트의 자식 오브젝트로 만들어야함
+
+//AudioClip에 발소리 파일 연결
+>>>>>>> Stashed changes
