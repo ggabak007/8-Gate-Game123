@@ -49,9 +49,9 @@
 ## 5. 구현해야 하는 항목 
 
 ### 5.1. 💻 코드
-* PlayerMovement.cs.cs - 플레이어의 움직임, 소리 연동
-* PlayerInventory.cs - 플레이어의 도구 사용 로직
-* ItemInteraction.cs - 도구 관리
+* PlayerMovement.cs.cs - 플레이어의 움직임, 소리 연동 **(구현)**
+* PlayerInventory.cs - 플레이어의 도구 사용 로직 **(구현)** + Tools.cs, ToolsType.cs로 사용 도구 관리
+* 
 * StageEndTrigger.cs - 씬 이동: 스테이지 간 이동 (성공 시 다음 스테이지, 실패 시 1 스테이지로 이동) 
 * GameManager.cs - 씬 데이터 유지
 * AnomalyManager.cs -   확률 기반 변칙 생성 (난수 생성 관리)
