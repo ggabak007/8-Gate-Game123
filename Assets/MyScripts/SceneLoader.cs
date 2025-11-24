@@ -34,7 +34,7 @@ public class SceneLoader : MonoBehaviour
     public void LoadClearScene()
     {
         Debug.Log($"SceneLoader: 게임 클리어 씬 ({GAME_CLEAR_SCENE}) 로드 요청.");
-        SceneManager.LoadScene(GAME_CLEAR_SCENE);
+        SceneManager.LoadScene(GAME_CLEAR_SCENE); 
     }
 
 }
@@ -43,3 +43,5 @@ public class SceneLoader : MonoBehaviour
 
 
 // 씬이 바뀌어도 오브젝트가 파괴되지 않도록 설정
+// Build Settings에 씬 추가해야합니다 Generic_Stage , GameClear_Scene(엔딩 필요시) 메인메뉴(UI) 구성해서 추가해야합니다
+// 씬 로더는 메인메뉴를 만들어서 게임시작 버튼에 연결해주면됩니다

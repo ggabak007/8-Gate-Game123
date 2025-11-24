@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,69 +10,52 @@ public class GameManager : MonoBehaviour
     public int maxDays = 4;           // 목표 (4일차)
 
     public Transform startPoint;      // 플레이어가 돌아올 위치 (StartPoint)
-    public GameObject player;
+    public GameObject player;          //플레이어
 
-    //private AnomalyManager anomalyManager; // 코드에서 찾아 연결
-    //private PlayerInventory playerInventory;
+    private AnomalyManager anomalyManager; // 코드에서 찾아 연결
 
     private void Awake()
     {
-        if (Instance == null) { Instance = this; }
-        else { Destroy(gameObject); }
+        if (Instance == null) 
+        { 
+            Instance = this; 
+        }
+        else 
+        {
+            Destroy(gameObject); 
+        }
     }
 
     void Start() 
     {
+        anomalyManager = FindFirstObjectByType<AnomalyManager>();
+        if (anomalyManager == null) Debug.LogError("GameManager: AnomalyManager가 없습니다!");
+
         StartNewDay();
     }
 
-    /*
-    private void FindAndConnectManagers()
-    {
-        // AnomalyManager를 씬 내에서 찾습니다.
-        anomalyManager = FindFirstObjectByType<AnomalyManager>();
-
-        // PlayerInventory는 Start()에서 player를 Inspector로 연결했다는 가정 하에 GetComponent로 가져옵니다.
-        if (player != null)
-        {
-            playerInventory = player.GetComponent<PlayerInventory>();
-        }
-
-        // SceneLoader는 더 이상 필요 없지만, 필요시 참조 유지 가능
-
-        if (anomalyManager == null || playerInventory == null)
-        {
-            Debug.LogError("GameManager: 필수 매니저/컴포넌트(Anomaly/Inventory)를 찾을 수 없습니다.");
-        }
-
-        // Inspector에 player와 playerStartPoint가 연결되어 있는지 확인
-        if (player == null || playerStartPoint == null)
-        {
-            Debug.LogError("GameManager: Player 또는 Player Start Point를 Inspector에서 연결해야 합니다.");
-        }
-    }
-
-    */
-
     // [핵심] 씬 로딩 없이, 위치만 옮겨서 하루를 시작하는 함수
-    public void StartNewDay()
+    public void StartNewDay(Vector3 offset = default(Vector3))
     {
-        /* 이상현상 랜덤 배치 (AnomalyManager에게 시킴)
+        Debug.Log(currentStageIndex + "일차 시작");
+        // 이상현상 랜덤 배치 (AnomalyManager에게 시킴)
         if (anomalyManager != null)
         {
             anomalyManager.ResetStage();
         }
-        */
 
-        // 플레이어 위치를 시작점으로 강제 이동
+
+        // 플레이어 위치를 시작점으로 강제 이동하면 화면이 뚝 끊기는 현상을 방지하기위해 
+        // 씬이 바뀔때 플레이어의 위치를 씬의 시작지점 중앙값(스테이지1에서 시작하는 공간)에서 플레이어의 거리를 계산하여 offset값으로 전달,
+        //씬이 바뀔때 offset값을 더해주어 자연스럽게 이동하는 효과를 줌
+
         if (player != null && startPoint != null)
         {
             // (중요) CharacterController가 켜져 있으면 강제 이동이 안 될 때가 있음
             CharacterController cc = player.GetComponent<CharacterController>();
             if (cc != null) cc.enabled = false; // 잠시 끄고
 
-            player.transform.position = startPoint.position; // 이동시키고
-            player.transform.rotation = startPoint.rotation; // 회전시키고
+            player.transform.position = startPoint.position + offset ; // 이동 (회전 삭제)
 
             if (cc != null) cc.enabled = true; // 다시 켬
         }
@@ -80,20 +64,18 @@ public class GameManager : MonoBehaviour
     }
 
     // 다음 단계(다음 날)로 이동
-    public void GoToNextStage()
+    public void GoToNextStage(Vector3 offset = default(Vector3))
     {
         currentStageIndex++;
 
         if (currentStageIndex > maxDays)
         {
-            Debug.Log("탈출 성공! 엔딩!");
-            // 나중에 엔딩 씬 만들면 아래 주석 풀기
-            // SceneManager.LoadScene("EndingScene"); 
+            GameClear(); // 게임 클리어
         }
         else
         {
             Debug.Log($"통과! {currentStageIndex}일차로 넘어갑니다.");
-            StartNewDay(); // 씬 로딩 없이 바로 다음 날 시작
+            StartNewDay(offset); // 씬 로딩 없이 바로 다음 날 시작
         }
     }
 
@@ -102,6 +84,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("실패! 1일차로 돌아갑니다.");
         currentStageIndex = 1;
-        StartNewDay(); // 1일차 세팅으로 바로 시작
+        StartNewDay(Vector3.zero); // 1일차, 스테이지 시작지점으로 이동(시작지점을 (0,0,0)으로 설정, 맵 구현시 바꾸거나 맞추어주어야함)
+    }
+    private void GameClear()
+    {
+        Debug.Log("🎉 탈출 성공! 게임 클리어! 🎉");
+        SceneLoader.Instance.LoadClearScene(); // 엔딩씬 로드
     }
 }

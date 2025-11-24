@@ -1,9 +1,6 @@
-/* <<<<<<< Updated upstream:Assets/MyScripts/StageEndTrigger.cs
+
 ﻿using UnityEngine;
-=======
-﻿/* using UnityEngine;
-using UnityEngine.SceneManagement; 
->>>>>>> Stashed changes:Assets/Future/StageEndTrigger.cs
+using UnityEngine.SceneManagement;
 
 public class StageEndTrigger : MonoBehaviour
 {
@@ -23,31 +20,29 @@ public class StageEndTrigger : MonoBehaviour
 
     void Start()
     {
-<<<<<<< Updated upstream:Assets/MyScripts/StageEndTrigger.cs
-        anomalyManager = FindFirstObjectByType<AnomalyManager>();
-        if (anomalyManager == null) Debug.LogError("AnomalyManager가 없습니다!");
-    }
-=======
         // 씬 로드 시 AnomalyManager 인스턴스를 찾아 연결
         anomalyManager = FindFirstObjectByType<AnomalyManager>();
         if (anomalyManager == null)
         {
             Debug.LogError("AnomalyManager를 찾을 수 없습니다! 로직 구현 불가.");
         }
->>>>>>> Stashed changes:Assets/Future/StageEndTrigger.cs
+    }
 
     // ====== 3. 트리거 진입 로직 ======
-    // 플레이어가 트리거에 닿는 순간 바로 판정합니다. (Exit 로직보다 훨씬 안전함)
+    // 플레이어가 트리거에 닿는 순간 바로 판정합니다. (Exit 로직보다 훨씬 안전함)\
+    // 구현할때 empty object로 지나가는 통로를 막는 투명벽(스크립트 연결)을 설치해 지나가도록 판정. Is Trigger 체크 해야함
+    // 위치는 입구(스테이지 변경시 시작위치 뒤에 설치해야함) 
+    // 출구(스테이지 로직 성공시 다음스테이지, 실패시 1스테이지로 이동)
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            CheckCompletion();
+            CheckCompletion(other);
         }
     }
 
     // ====== 4. 핵심 판정 로직 ======
-    private void CheckCompletion()
+    private void CheckCompletion(Collider playerset)
     {
         // 현재 상황 가져오기
         bool hasAnomaly = anomalyManager.Is_Anomaly_Present; // 이상현상 있음?
@@ -84,7 +79,7 @@ public class StageEndTrigger : MonoBehaviour
                 isSuccess = true;
                 Debug.Log("[해결] 이상현상 해결 후 복귀 성공!");
             }
-            // (변형 룰) 만약 '발견만 하고 도망쳐도 성공'이라면 && isSolved를 빼면 됨
+            // 실패 - 이상현상 해결하지않고 되돌아가는 문으로 이동
             else if (hasAnomaly && !isSolved)
             {
                 Debug.LogWarning("[실패] 이상현상을 해결하지 않고 도망침!");
@@ -101,14 +96,14 @@ public class StageEndTrigger : MonoBehaviour
         // 결과 처리
         if (isSuccess)
         {
-            GameManager.Instance.GoToNextStage();
+            Vector3 offset = playerset.transform.position - transform.position;
+            GameManager.Instance.GoToNextStage(offset); // 다음스테이지로
         }
         else
         {
-            GameManager.Instance.ResetToStage1();
+            GameManager.Instance.ResetToStage1(); // 1스테이지로
         }
     }
 }
-*/
 
 // 맵 시작과 끝에 투명블록 설치해야함
