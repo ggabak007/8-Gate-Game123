@@ -1,15 +1,11 @@
-/* <<<<<<< Updated upstream:Assets/MyScripts/AnomalyManager.cs
-﻿using UnityEngine;
+using UnityEngine;
 // using System.Collections.Generic; // 리스트를 쓸 경우 필요
-=======
-﻿/* using UnityEngine;
->>>>>>> Stashed changes:Assets/Future/AnomalyManager.cs
 
 public class AnomalyManager : MonoBehaviour
 {
     // [설정] 외부에서 읽을 수는 있지만(get), 맘대로 바꿀 순 없음(private set)
-    public bool Is_Anomaly_Present { get; private set; } = false;
-    public bool Is_Anomaly_Solved { get; set; } = false;
+    public bool Is_Anomaly_Present { get; private set; } = false; // 이상현상이 존재하는지 확인
+    public bool Is_Anomaly_Solved { get; set; } = false; // 이상현상을 해결했는지 확인
 
     [Header("설정")]
     // 인스펙터에서 이상현상 오브젝트들(귀신, 피, 의자 등)을 여기에 다 넣으세요
@@ -105,9 +101,5 @@ public class AnomalyManager : MonoBehaviour
             // if (currentActiveAnomaly != null) currentActiveAnomaly.SetActive(false);
         }
     }
-<<<<<<< Updated upstream:Assets/MyScripts/AnomalyManager.cs
-} // (코드의 문제점 수정)
-=======
-}
 
-*/
+} // (코드의 문제점 수정)
