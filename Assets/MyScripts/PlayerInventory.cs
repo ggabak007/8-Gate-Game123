@@ -57,14 +57,14 @@ public class PlayerInventory : MonoBehaviour
                 SwitchTool(tool);
                 return;
             }
-            /*이상현상 사용 로직
+            //이상현상 사용 로직
             AnomalyObject anomaly = hit.collider.GetComponent<AnomalyObject>();
             if (anomaly != null)
             {
                 anomaly.TrySolveAnomaly(this);
                 return;
             }
-            */
+            
          }
     }
 
