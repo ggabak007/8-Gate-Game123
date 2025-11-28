@@ -126,11 +126,11 @@ public class AnomalyObject : MonoBehaviour
                 rb.useGravity = true;
 
                 // 2. 플레이어 반대 방향(벽 쪽)이나 앞쪽으로 튕겨 나가게 힘주기
-                rb.AddForce(transform.forward * 5.0f, ForceMode.Impulse);
+                rb.AddForce(-transform.forward * 5.0f, ForceMode.Impulse);
 
                 // 3. 빙글빙글 돌며 떨어짐
                 rb.AddTorque(Random.insideUnitSphere * 10.0f, ForceMode.Impulse);
-                Destroy(gameObject, 3.0f);
+                Destroy(gameObject, 1.0f);
                 Debug.Log("파괴됨");
             }
         }
