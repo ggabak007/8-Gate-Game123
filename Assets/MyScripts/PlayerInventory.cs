@@ -52,7 +52,7 @@ public class PlayerInventory : MonoBehaviour
             // 상호작용한 도구가 'InteractableTool' 컴포넌트를 가지고 있는지 확인
             Tools tool = hit.collider.GetComponent<Tools>();
 
-            if (tool != null)
+            if (tool != null )
             {
                 SwitchTool(tool);
                 return;
@@ -63,6 +63,12 @@ public class PlayerInventory : MonoBehaviour
             {
                 anomaly.TrySolveAnomaly(this);
                 return;
+            }
+
+            Door door = hit.collider.GetComponentInParent<Door>();
+            if (door != null)
+            {
+                door.ToggleDoor();
             }
 
         }

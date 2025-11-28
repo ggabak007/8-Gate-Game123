@@ -5,9 +5,16 @@ public class AnomalyObject : MonoBehaviour
 {
 
     public ToolType requiredTool = ToolType.None; //발생한 이상현상을 해결할 때 필요한 도구 타입
-
+    public GameObject objectToShow; // (침대 위 인형)
+    public Texture cleanTexture;
+    public Material cleanMaterial;
+    // 문을 닫아야 해결되는지 여부( 이상현상중 사람 모형이 바깥에 꺼내져있을떄 지정된 냉장고(문이 열려있음) 에 넣고 문을 닫으면 True(해결)
+    public bool solveOnDoorClose = false; 
+    public bool isReadyToSolve = false;   // 인형은 놓았는데 문을 아직 안 닫은 상태
+    public Door doorToOpen;
     // 이상현상 해결여부
     private bool isResolved = false;
+    public int anomalyID = 0;
 
     private AnomalyManager anomalyManager; // 이상현상 해결 참조를 위해 필요
     private PlayerInventory playerInventory; // 플레이어가 가진 도구 확인 및 사용한 도구 처리(파괴)
@@ -58,12 +65,18 @@ public class AnomalyObject : MonoBehaviour
             // 이상현상 해결 연출함수 호출
 
             ExecuteAnomalyFix();
-
-            // AnomalyManager에 해결성공을 알림
-            anomalyManager.NotifyAnomalySolved();
-
-            isResolved = true;
-            Debug.Log($"SUCCESS: {requiredTool}을(를) 사용하여 이상현상을 해결했습니다!");
+            Debug.Log("이미 해결된 이상현상입니다." + anomalyID);
+            if (solveOnDoorClose)
+            {
+                // [대기 모드] : 해결했다고 보고 안 함. 준비 상태만 켬.
+                isReadyToSolve = true;
+                Debug.Log("도구 배치 완료! 문을 닫으면 해결됩니다.");
+            }
+            else
+            {
+                FinalizeSolve();
+            }
+           
         }
         else //오답도구 사용시 [ 실패 조건 ]
         {
@@ -75,7 +88,15 @@ public class AnomalyObject : MonoBehaviour
 
         }
     }
-
+    public void FinalizeSolve()
+    {
+        if (!isResolved && anomalyManager != null)
+        {
+            anomalyManager.NotifyAnomalySolved();
+            isResolved = true;
+            Debug.Log("최종 해결 완료!");
+        }
+    }
 
 
     // 이상현상 해결시 실행되는 연출 함수 ( 추가 구현 필요 )
@@ -88,8 +109,36 @@ public class AnomalyObject : MonoBehaviour
 
         // 예시 2: 텍스처를 깨끗한 것으로 변경 (창문 낙서를 닦은 경우)
         // GetComponent<Renderer>().material.mainTexture = cleanTexture; - 텍스쳐 교체 ( 추가 변수 및 컴포넌트 필요 )
-        // 
 
+        // [Element 0] : 낙서 지우기
+        if (anomalyID == 0)
+        {
+            //texture나 Material 교체 구현
+        }
+        // [Element 1] : 그림 부수기
+        else if (anomalyID == 1)
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                // 1. 물리 엔진 켜기 (벽에서 떨어짐)
+                rb.isKinematic = false;
+                rb.useGravity = true;
+
+                // 2. 플레이어 반대 방향(벽 쪽)이나 앞쪽으로 튕겨 나가게 힘주기
+                rb.AddForce(transform.forward * 5.0f, ForceMode.Impulse);
+
+                // 3. 빙글빙글 돌며 떨어짐
+                rb.AddTorque(Random.insideUnitSphere * 10.0f, ForceMode.Impulse);
+                Destroy(gameObject, 3.0f);
+                Debug.Log("파괴됨");
+            }
+        }
+        // [Element 2] : 오브젝트 켜기 (시체, 인형 등)
+        else if (anomalyID == 2)
+        {
+            if (objectToShow != null) objectToShow.SetActive(true);
+        }
     }
 
 
@@ -98,4 +147,20 @@ public class AnomalyObject : MonoBehaviour
     {
         // 예를 들면 시야가 흐려진다던지, 화면이 일시적으로 어두워지거나 섬광효과를 주거나 공포 소리를 주는 등의 연출
     }
+
+    private void OnEnable()
+    {
+        // 만약 연결된 문이 있다면, 강제로 열어둔다!
+        if (doorToOpen != null)
+        {
+            doorToOpen.SetOpenState();
+        }
+    }
+
+    public void SetAnomalyID(int id)
+    {
+        anomalyID = id;
+        Debug.Log($"[AnomalyObject] ID가 {id}번으로 자동 설정되었습니다.");
+    }
+
 }

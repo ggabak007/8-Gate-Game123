@@ -19,8 +19,7 @@ public class AnomalyManager : MonoBehaviour
 
     void Start()
     {
-        // 게임 시작 시 초기화
-        ResetStage();
+        
     }
 
     // 1. 스테이지 초기화 (다음 날로 넘어갈 때도 이 함수를 부르면 됨)
@@ -87,6 +86,7 @@ public class AnomalyManager : MonoBehaviour
             currentActiveAnomaly.SetActive(true);
             Debug.Log($"활성화된 이상현상: {currentActiveAnomaly.name}");
         }
+        AnomalyObject anomalyScript = currentActiveAnomaly.GetComponent<AnomalyObject>();
     }
 
     // 3. 외부(AnomalyObject)에서 호출되는 함수
