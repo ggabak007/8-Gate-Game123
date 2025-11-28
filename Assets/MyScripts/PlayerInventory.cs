@@ -64,8 +64,8 @@ public class PlayerInventory : MonoBehaviour
                 anomaly.TrySolveAnomaly(this);
                 return;
             }
-            
-         }
+
+        }
     }
 
     private void SwitchTool(Tools newTool)
@@ -83,8 +83,8 @@ public class PlayerInventory : MonoBehaviour
         if (handPosition != null)
         {
             heldToolObject.transform.SetParent(handPosition);
-            heldToolObject.transform.localPosition = Vector3.zero;
-            heldToolObject.transform.localRotation = Quaternion.identity;
+            heldToolObject.transform.localPosition = newTool.gripPosition;
+            heldToolObject.transform.localRotation = Quaternion.Euler(newTool.gripRotation);
         }
         else
         {

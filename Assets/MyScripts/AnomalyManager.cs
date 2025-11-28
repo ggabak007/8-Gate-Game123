@@ -12,7 +12,7 @@ public class AnomalyManager : MonoBehaviour
     public GameObject[] anomalyObjects;
 
     // 75 미만이면 이상현상 발생 (즉, 75% 확률로 발생)
-    private const int ANOMALY_THRESHOLD = 75;
+    private const int ANOMALY_THRESHOLD = 100;
 
     // 현재 켜져있는 이상현상을 기억하는 변수
     private GameObject currentActiveAnomaly = null;

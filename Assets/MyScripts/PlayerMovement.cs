@@ -3,7 +3,9 @@
 public class PlayerMovement : MonoBehaviour
 {
     // 움직임 설정
-    public float moveSpeed = 3.0f; // 2.0이 느리면 좀 올리세요
+    public float walkSpeed = 2.5f;      // 걷는 속도
+    public float runSpeed = 4.0f;       // 달리기 속도
+    public float crouchSpeed = 1.5f;    // 앉기 속도
     public float gravity = -9.81f;
 
     // 시야 설정
@@ -21,6 +23,10 @@ public class PlayerMovement : MonoBehaviour
 
     private Camera playerCamera;
 
+    public float crouchCameraY = 0.1f;      // 앉았을 때 카메라 높이
+    public float crouchTransitionSpeed = 10f; // 앉을 때 부드러운 정도 (클수록 빠름)
+    private float defaultCameraY;           // 서 있을 때 카메라 높이 (자동 저장)
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -29,6 +35,10 @@ public class PlayerMovement : MonoBehaviour
         // 카메라 찾기 (최적화)
         playerCamera = GetComponentInChildren<Camera>();
         if (playerCamera == null) playerCamera = Camera.main;
+
+        if (playerCamera != null) {
+            defaultCameraY = playerCamera.transform.localPosition.y;
+        }
 
         // 마우스 커서 숨기기
         Cursor.lockState = CursorLockMode.Locked;
@@ -43,6 +53,21 @@ public class PlayerMovement : MonoBehaviour
         LookRotation();
         Movement();
         Footsteps();
+        HandleCrouch();
+    }
+
+    private void HandleCrouch()
+    {
+        if (playerCamera == null) return;
+
+        // 1. 컨트롤 키를 누르고 있으면 목표 높이를 '앉은 높이'로, 아니면 '원래 높이'로 설정
+        float targetY = Input.GetKey(KeyCode.LeftControl) ? crouchCameraY : defaultCameraY;
+
+        // 2. 부드럽게 높이 변경 (Lerp 사용)
+        Vector3 newPos = playerCamera.transform.localPosition;
+        newPos.y = Mathf.Lerp(newPos.y, targetY, Time.deltaTime * crouchTransitionSpeed);
+
+        playerCamera.transform.localPosition = newPos;
     }
 
     private void LookRotation()
@@ -64,6 +89,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
+        float currentSpeed = walkSpeed;
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            currentSpeed = crouchSpeed; // 앉으면 제일 느리게
+        }
+        else if (Input.GetKey(KeyCode.LeftShift))
+        {
+            currentSpeed = runSpeed;    // 서서 쉬프트 누르면 달리기
+        }
         if (characterController.isGrounded)
         {
             float x = Input.GetAxis("Horizontal");
@@ -83,15 +118,13 @@ public class PlayerMovement : MonoBehaviour
             if (moveInput.magnitude > 1) moveInput.Normalize();
 
             // 속도 적용 (X, Z) - 기존 moveDirection의 Y(중력)는 유지해야 함을 주의
-            moveDirection.x = moveInput.x * moveSpeed;
-            moveDirection.z = moveInput.z * moveSpeed;
+            moveDirection.x = moveInput.x * currentSpeed;
+            moveDirection.z = moveInput.z * currentSpeed;
 
             if (Input.GetButtonDown("Jump"))
             {
                 moveDirection.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
-            // 지면에 붙어있게 하기 위해 중력 적용
-            moveDirection.y = gravity;
         }
         else
         {
