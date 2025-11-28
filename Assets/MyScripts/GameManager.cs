@@ -86,6 +86,8 @@ public class GameManager : MonoBehaviour
         currentStageIndex = 1;
         StartNewDay(Vector3.zero); // 1일차, 스테이지 시작지점으로 이동(시작지점을 (0,0,0)으로 설정, 맵 구현시 바꾸거나 맞추어주어야함)
     }
+
+
     private void GameClear()
     {
         Debug.Log("🎉 탈출 성공! 게임 클리어! 🎉");
