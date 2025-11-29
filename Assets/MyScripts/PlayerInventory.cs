@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.UI; // 이상현상 진행 ui 추가시 필요
 /* 기초설정
 
 
@@ -17,7 +19,15 @@ public class PlayerInventory : MonoBehaviour
     public Transform handPosition;      // 도구가 부착될 위치 (카메라 자식 오브젝트 추천)
     public float interactDistance = 3f; // 상호작용 거리 ( 레이캐스팅
     public float dropForce = 2.0f;
+    public float interactTime = 2.0f;
 
+    public Slider progressSlider; // 상호작용 진행바 UI
+    public float wipeSpeed = 15f; // 닦는 속도
+    public float wipeAngle = 30f; // 닦는 각도
+    public float smashSpeed = 20f; // 내리찍는 속도
+    public float raiseAngle = -60f; // 망치 들어 올리는 각도 (뒤로 젖힘)
+    private Coroutine currentAnimCoroutine = null;
+    private float currentInteractTimer = 0f;
     // 이전에 들고 있던 도구 오브젝트 (스위칭 및 드랍을 위해 필요)
     private GameObject heldToolObject = null;
     /*void Start()
@@ -28,11 +38,7 @@ public class PlayerInventory : MonoBehaviour
     */
     void Update()
     {
-        // E 키를 누르면 습득/스위칭
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TryInteract();
-        }
+        TryInteract();
 
         // Q 키를 누르면 드랍
         if (Input.GetKeyDown(KeyCode.Q))
@@ -51,27 +57,164 @@ public class PlayerInventory : MonoBehaviour
         {
             // 상호작용한 도구가 'InteractableTool' 컴포넌트를 가지고 있는지 확인
             Tools tool = hit.collider.GetComponent<Tools>();
-
-            if (tool != null )
-            {
-                SwitchTool(tool);
-                return;
-            }
-            //이상현상 사용 로직
             AnomalyObject anomaly = hit.collider.GetComponent<AnomalyObject>();
-            if (anomaly != null)
-            {
-                anomaly.TrySolveAnomaly(this);
-                return;
-            }
-
             Door door = hit.collider.GetComponentInParent<Door>();
-            if (door != null)
+
+            if (door != null && Input.GetKeyDown(KeyCode.E))
             {
                 door.ToggleDoor();
+                return; // 문을 열었으면 다른 행동은 하지 않음
             }
 
+            if (tool != null || anomaly != null)
+            {
+                // 이상현상인데 도구가 틀렸으면 무시
+                if (anomaly != null)
+                {
+                    // 정답 도구가 아니고 + 맨손도 아니라면 -> 반응 안 함 (모션 X)
+                    if (anomaly.requiredTool != currentTool && currentTool != ToolType.None)
+                    {
+                        
+                        return;
+                    }
+                }
+                // [E키 누르는 중]
+                if (Input.GetKey(KeyCode.E))
+                {
+                    // 도구별 애니메이션 실행 (닦기 등)
+                    PlayToolAnimation(true);
+
+                    // 타이머 증가
+                    currentInteractTimer += Time.deltaTime;
+
+                    // UI 업데이트
+                    if (progressSlider != null)
+                    {
+                        progressSlider.gameObject.SetActive(true);
+                        progressSlider.value = currentInteractTimer / interactTime;
+                    }
+
+                    // 2초 지나면 성공
+                    if (currentInteractTimer >= interactTime)
+                    {
+                        // 마무리 동작 (내리찍기 등)
+                        FinishToolAnimation();
+
+                        // 각자 기능 실행
+                        if (tool != null) SwitchTool(tool);
+                        if (door != null) door.ToggleDoor();
+                        if (anomaly != null) anomaly.TrySolveAnomaly(this);
+
+                        ResetInteraction(); // 초기화
+                    }
+                }
+                // e키 떼면 초기화
+                else if (Input.GetKeyUp(KeyCode.E))
+                {
+                    ResetInteraction();
+                }
+                return;
+
+            }
         }
+    }
+
+    private void ResetInteraction()
+    {
+        currentInteractTimer = 0f;
+        if (progressSlider != null)
+        {
+            progressSlider.value = 0;
+            progressSlider.gameObject.SetActive(false);
+        }
+        PlayToolAnimation(false); // 애니메이션 멈춤
+    }
+
+
+    private void PlayToolAnimation(bool isPlaying)
+    {
+        // 수건(Towel)일 때 -> 닦는 모션
+        if (currentTool == ToolType.Towel)
+        {
+            if (isPlaying)
+            {
+                if (currentAnimCoroutine == null)
+                    currentAnimCoroutine = StartCoroutine(WipeMotion());
+            }
+            else
+            {
+                if (currentAnimCoroutine != null)
+                {
+                    StopCoroutine(currentAnimCoroutine);
+                    currentAnimCoroutine = null;
+                    if (handPosition) handPosition.localRotation = Quaternion.identity;
+                }
+            }
+        }
+        else if (currentTool == ToolType.Hammel)
+        {
+            if (isPlaying && handPosition != null)
+            {
+                float progress = Mathf.Clamp01(currentInteractTimer / interactTime);
+                Quaternion targetRot = Quaternion.Euler(raiseAngle, 0, 0); // 목표: 뒤로 젖힘
+
+                handPosition.localRotation = Quaternion.Slerp(Quaternion.identity, targetRot, progress);
+            }
+            else if (!isPlaying && handPosition != null)
+            {
+                handPosition.localRotation = Quaternion.Lerp(handPosition.localRotation, Quaternion.identity, Time.deltaTime * 10f);
+            }
+        }
+    }
+
+    private void FinishToolAnimation()
+    {
+        // 해머일 때 -> 내리찍는 모션
+        if (currentTool == ToolType.Hammel)
+        {
+            StartCoroutine(SmashMotion());
+        }
+    }
+
+    // 모션 동작 코루틴
+
+    IEnumerator WipeMotion()
+    {
+        Quaternion startRot = Quaternion.identity;
+        while (true)
+        {
+            float z = Mathf.Sin(Time.time * wipeSpeed) * wipeAngle;
+            if (handPosition) handPosition.localRotation = startRot * Quaternion.Euler(0, 0, z);
+            yield return null;
+        }
+    }
+
+    IEnumerator SmashMotion()
+    {
+        if (handPosition == null) yield break;
+
+        float t = 0;
+        Quaternion startRot = handPosition.localRotation;
+        Quaternion upRot = Quaternion.Euler(-45, 0, 0);
+
+        // 찍기
+        Quaternion downRot = Quaternion.Euler(60, 0, 0);
+        while (t < 1)
+        {
+            t += Time.deltaTime * smashSpeed * 2;
+            handPosition.localRotation = Quaternion.Lerp(upRot, downRot, t);
+            yield return null;
+        }
+        //여기에 소리 추가를 하면 될거같습니다.
+        yield return new WaitForSeconds(0.2f);
+        t = 0;
+        while (t < 1)
+        {
+            t += Time.deltaTime * 5f; // 부드럽게 복귀
+            handPosition.localRotation = Quaternion.Lerp(downRot, Quaternion.identity, t);
+            yield return null;
+        }
+        handPosition.localRotation = Quaternion.identity;
     }
 
     private void SwitchTool(Tools newTool)

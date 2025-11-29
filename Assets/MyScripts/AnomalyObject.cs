@@ -113,7 +113,7 @@ public class AnomalyObject : MonoBehaviour
         // [Element 0] : 낙서 지우기
         if (anomalyID == 0)
         {
-            //texture나 Material 교체 구현
+            Destroy(gameObject, 0.1f);
         }
         // [Element 1] : 그림 부수기
         else if (anomalyID == 1)
