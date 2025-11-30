@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|c:\\users\\soomi\\desktop\\8-gate-game123\\assets\\myscripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|c:\\users\\soomi\\desktop\\8-gate-game123\\assets\\myscripts\\playerinventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\playerinventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|c:\\users\\soomi\\desktop\\8-gate-game123\\assets\\myscripts\\toolmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\toolmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyObject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:Assets\\MyScripts\\AnomalyObject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\anomalymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\anomalymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\anomalyobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\anomalyobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\cursorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\cursorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\playerinventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\playerinventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\toolstype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -33,6 +33,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\UISettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:Assets\\MyScripts\\UISettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\CursorController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\MyScripts\\CursorController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,19 +46,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
+              "Title": "Toolmanager.cs",
+              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\Toolmanager.cs",
+              "RelativeDocumentMoniker": "Assets\\MyScripts\\Toolmanager.cs",
+              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\Toolmanager.cs",
+              "RelativeToolTip": "Assets\\MyScripts\\Toolmanager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T15:35:20.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "CursorController.cs",
               "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\CursorController.cs",
               "RelativeDocumentMoniker": "Assets\\MyScripts\\CursorController.cs",
               "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\CursorController.cs",
               "RelativeToolTip": "Assets\\MyScripts\\CursorController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd\u002BUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQ9SURBVEhL7ZVPbJRFFMB/b76vW9ota\u002BkuLYE2lba0BlIItFYhUdSLlIOhRiXSQPBojO2BxAQOBhJjgwmH3UBMNIYABy5NJUazGDQ2JkaFFsUCghT6BwopdFvo7nZbdr95HqBNt2C4eNCkv2Qu8/KbN\u002B/NZAbmmee/jgBcvHExiFD\u002B3UDU/brvG/rG\u002BxhPT1AaWMKLpa\u002BwrXobgfzAUE2oZmi2fOTXI0HPeOXGNcM71\u002B4cAjj6\u002B1F/2qbL01566lbi1sC\u002Bl/dlZjsGQHKk3jimTR0ngiMRdSRiHBuxSkRUI0DEy3ibZ4sAnuPV42ibkpmJpW26HNjlM\u002B6OpQuX\u002BrMNcAF\u002BuflTCEzd6GQsGMoL3R\u002BbHO1CdXxJ/pJnFQ2ej/Xgc3NPzpW7RrpCBq1T4efpud9uny4AswohV41xs42HCY9fPg4oZQVlVAWqksV5Jcfi6eTVkvzitkQ6Hvx2IIqnWZ0B4KvedlQka\u002B5E3wmwgqKodbJiTJ9hzWfLmy0Sfnph\u002BfkXlm2MOmhU3ZxYJpPZ3Hv3yqbB8f5GTzOftFS\u002BtT/hK9x0PTGwuqO3g8HkQC3QKHBaVTsfLrkMaBRhVJVoRaAyVRWoSlmHaHtTe48LMJyKIWoZSd3pPPX2D/tnbejz2i9WjoFdrUIq5uUtyDW8ivCmGEDVJ0ieCs\u002BJsBpAVV0RyUcpFtEyEVSFMUfpA3rMrMUfi3iZbtTswbPR0KJQ0nr2mFppRWkFOaZoUuCkqrSqSivCAVQHFO1C2WOtthpht5emi\u002BmWFoYDzaI2jMjBsdb43rlJ/4nHeUWRQINVGxGlN\u002BNIa/z9eGy288QK/20eubZzWXO45mlrqVerf324/qNLifuJ\u002BsF4//Ivr3QwmBzYoJArUFsYDjQDWGsrBEIKnpvRN9YdXpOoWLRiiim627e29z2xQmupB2lDTOPI2IgfdDsQRgir6g5B/AqNojYsasMi7EKkXJA6DB\u002BDhI3VNieHeqYrLPWXgkBZQenG539c/4G4TtRMTI5qrm/ThdiFxr57fUszpPOCTnAyqclTggxjFBGpfZCM04h0AqiyDKERGEU5KeiECilj9PJMwmcW1aDAYv/ilzI2syYxcffeZHriapG7\u002BN2iBcG68fvjpDXD1g1bU0DHw0HpweJmFTaCdA69N7wXoDRS0mAdrQXpxTr7u985F\u002Bvm3EzHXICmFU2oGi6N/UnPyB/\u002B/vH\u002B7alMKr4quKq8srCKpsrXcY2PU3w/IwK8VtEEIogRDvEpAFuqt6CYB/ffGA5xKMtxAepCDTGEs0Px60/dTN5ibHI0x6otuj1x59rKopXX1hXXUZCTn/VTAKwtqY8ZzFljdCa2trghIehFq9zw1HvkPTQA1m/PqOpuz2qLiG0RS4tV24J6LaLaYtGWyXQ6Olf25fnOWOzu9JSdiaXupQaN2AOuzz1SHa9OZhvzzPN/4G/PM/YuwPWw4gAAAABJRU5ErkJggg==",
-              "WhenOpened": "2025-11-28T10:15:17.825Z"
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T15:35:20.512Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerInventory.cs",
+              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs",
+              "RelativeDocumentMoniker": "Assets\\MyScripts\\PlayerInventory.cs",
+              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs",
+              "RelativeToolTip": "Assets\\MyScripts\\PlayerInventory.cs",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAAAA8BAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T10:13:52.167Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -64,9 +94,22 @@
               "RelativeDocumentMoniker": "Assets\\MyScripts\\GameManager.cs",
               "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\GameManager.cs",
               "RelativeToolTip": "Assets\\MyScripts\\GameManager.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAIwCEAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAAAEIAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-29T06:04:30.119Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AnomalyObject.cs",
+              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyObject.cs",
+              "RelativeDocumentMoniker": "Assets\\MyScripts\\AnomalyObject.cs",
+              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyObject.cs",
+              "RelativeToolTip": "Assets\\MyScripts\\AnomalyObject.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAADwvxgAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T15:35:20.527Z",
               "EditorCaption": ""
             },
             {
@@ -89,47 +132,21 @@
               "RelativeDocumentMoniker": "Assets\\MyScripts\\Door.cs",
               "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\Door.cs",
               "RelativeToolTip": "Assets\\MyScripts\\Door.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAxwEIAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-28T06:48:41.356Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "AnomalyManager.cs",
               "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyManager.cs",
               "RelativeDocumentMoniker": "Assets\\MyScripts\\AnomalyManager.cs",
               "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyManager.cs",
               "RelativeToolTip": "Assets\\MyScripts\\AnomalyManager.cs",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAcwBUAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-28T10:13:52.157Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "PlayerInventory.cs",
-              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs",
-              "RelativeDocumentMoniker": "Assets\\MyScripts\\PlayerInventory.cs",
-              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs",
-              "RelativeToolTip": "Assets\\MyScripts\\PlayerInventory.cs",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAYwIAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-28T10:13:52.167Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AnomalyObject.cs",
-              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyObject.cs",
-              "RelativeDocumentMoniker": "Assets\\MyScripts\\AnomalyObject.cs",
-              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\AnomalyObject.cs",
-              "RelativeToolTip": "Assets\\MyScripts\\AnomalyObject.cs",
-              "ViewState": "AgIAAGgAAAAAAAAAAAAAwHMAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-28T10:13:52.179Z",
-              "EditorCaption": ""
+              "ViewState": "AgIAACAAAAAAAAAAAAAcwCkAAAAcAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd\u002BUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAQ9SURBVEhL7ZVPbJRFFMB/b76vW9ota\u002BkuLYE2lba0BlIItFYhUdSLlIOhRiXSQPBojO2BxAQOBhJjgwmH3UBMNIYABy5NJUazGDQ2JkaFFsUCghT6BwopdFvo7nZbdr95HqBNt2C4eNCkv2Qu8/KbN\u002B/NZAbmmee/jgBcvHExiFD\u002B3UDU/brvG/rG\u002BxhPT1AaWMKLpa\u002BwrXobgfzAUE2oZmi2fOTXI0HPeOXGNcM71\u002B4cAjj6\u002B1F/2qbL01566lbi1sC\u002Bl/dlZjsGQHKk3jimTR0ngiMRdSRiHBuxSkRUI0DEy3ibZ4sAnuPV42ibkpmJpW26HNjlM\u002B6OpQuX\u002BrMNcAF\u002BuflTCEzd6GQsGMoL3R\u002BbHO1CdXxJ/pJnFQ2ej/Xgc3NPzpW7RrpCBq1T4efpud9uny4AswohV41xs42HCY9fPg4oZQVlVAWqksV5Jcfi6eTVkvzitkQ6Hvx2IIqnWZ0B4KvedlQka\u002B5E3wmwgqKodbJiTJ9hzWfLmy0Sfnph\u002BfkXlm2MOmhU3ZxYJpPZ3Hv3yqbB8f5GTzOftFS\u002BtT/hK9x0PTGwuqO3g8HkQC3QKHBaVTsfLrkMaBRhVJVoRaAyVRWoSlmHaHtTe48LMJyKIWoZSd3pPPX2D/tnbejz2i9WjoFdrUIq5uUtyDW8ivCmGEDVJ0ieCs\u002BJsBpAVV0RyUcpFtEyEVSFMUfpA3rMrMUfi3iZbtTswbPR0KJQ0nr2mFppRWkFOaZoUuCkqrSqSivCAVQHFO1C2WOtthpht5emi\u002BmWFoYDzaI2jMjBsdb43rlJ/4nHeUWRQINVGxGlN\u002BNIa/z9eGy288QK/20eubZzWXO45mlrqVerf324/qNLifuJ\u002BsF4//Ivr3QwmBzYoJArUFsYDjQDWGsrBEIKnpvRN9YdXpOoWLRiiim627e29z2xQmupB2lDTOPI2IgfdDsQRgir6g5B/AqNojYsasMi7EKkXJA6DB\u002BDhI3VNieHeqYrLPWXgkBZQenG539c/4G4TtRMTI5qrm/ThdiFxr57fUszpPOCTnAyqclTggxjFBGpfZCM04h0AqiyDKERGEU5KeiECilj9PJMwmcW1aDAYv/ilzI2syYxcffeZHriapG7\u002BN2iBcG68fvjpDXD1g1bU0DHw0HpweJmFTaCdA69N7wXoDRS0mAdrQXpxTr7u985F\u002Bvm3EzHXICmFU2oGi6N/UnPyB/\u002B/vH\u002B7alMKr4quKq8srCKpsrXcY2PU3w/IwK8VtEEIogRDvEpAFuqt6CYB/ffGA5xKMtxAepCDTGEs0Px60/dTN5ibHI0x6otuj1x59rKopXX1hXXUZCTn/VTAKwtqY8ZzFljdCa2trghIehFq9zw1HvkPTQA1m/PqOpuz2qLiG0RS4tV24J6LaLaYtGWyXQ6Olf25fnOWOzu9JSdiaXupQaN2AOuzz1SHa9OZhvzzPN/4G/PM/YuwPWw4gAAAABJRU5ErkJggg==",
+              "WhenOpened": "2025-11-28T10:13:52.157Z"
             },
             {
               "$type": "Document",

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public Transform startPoint;      // 플레이어 시작 위치
     public GameObject player;         // 플레이어
     public AnomalyManager anomalyManager;
+    private ToolManager toolManager;
 
     [Header("코너 트리거 (새로 추가됨)")]
     // 코너를 막는 벽 (Return Type, 이상현상 있을 때 켜짐)
@@ -39,7 +40,10 @@ public class GameManager : MonoBehaviour
     public void StartNewDay(Vector3 offset = default(Vector3))
     {
         Debug.Log($"{currentStageIndex}일차 시작");
-
+        if (currentStageIndex == 1)
+        {
+            anomalyManager.FullResetPool();
+        }
         // 1. 이상현상 리셋 & 생성
         if (anomalyManager != null)
         {
@@ -51,7 +55,18 @@ public class GameManager : MonoBehaviour
             bool isAnomaly = anomalyManager.Is_Anomaly_Present;
             SetCornerTriggers(isAnomaly);
         }
+        if (toolManager != null)
+        {
+            toolManager.ResetAllTools();
+        }
 
+        // [추가] 플레이어 손도 비워줘야 함 (들고 있던 거 강제 반납)
+        PlayerInventory inv = player.GetComponent<PlayerInventory>();
+        if (inv != null)
+        {
+            // 인벤토리 변수만 초기화 
+            inv.ForceClearHand(); 
+        }
         // 2. 플레이어 위치 이동 (오프셋 적용 - 님이 만드신 로직 유지)
         if (player != null && startPoint != null)
         {

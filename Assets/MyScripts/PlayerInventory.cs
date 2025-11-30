@@ -141,6 +141,7 @@ public class PlayerInventory : MonoBehaviour
                     if (handPosition) handPosition.localRotation = Quaternion.identity;
                 }
             }
+            return;
         }
         else if (currentTool == ToolType.Hammer) // Hammel 오타 수정
         {
@@ -153,6 +154,16 @@ public class PlayerInventory : MonoBehaviour
             else if (!isPlaying && handPosition != null)
             {
                 handPosition.localRotation = Quaternion.Lerp(handPosition.localRotation, Quaternion.identity, Time.deltaTime * 10f);
+            }
+        }
+        else
+        {
+            // 혹시라도 수건 코루틴이 남아있으면 끔
+            if (currentAnimCoroutine != null)
+            {
+                StopCoroutine(currentAnimCoroutine);
+                currentAnimCoroutine = null;
+                if (handPosition) handPosition.localRotation = Quaternion.identity;
             }
         }
     }
@@ -189,6 +200,7 @@ public class PlayerInventory : MonoBehaviour
 
     private void SwitchTool(Tools newTool)
     {
+        ResetInteraction();
         if (currentTool != ToolType.None) DropTool();
 
         currentTool = newTool.toolType;
@@ -239,11 +251,29 @@ public class PlayerInventory : MonoBehaviour
     {
         if (currentTool != ToolType.None)
         {
-            if (heldToolObject != null) Destroy(heldToolObject);
+            if (currentAnimCoroutine != null) StopCoroutine(currentAnimCoroutine);
+            if (handPosition != null) handPosition.localRotation = Quaternion.identity;
+
+            if (heldToolObject != null)
+            {
+                // 1. 비활성화
+                heldToolObject.SetActive(false);
+
+                // 2. 손에서 떼어내기 
+                heldToolObject.transform.SetParent(null);
+            }
             currentTool = ToolType.None;
             heldToolObject = null;
+            ResetInteraction();
         }
     }
 
     public ToolType GetCurrentTool() { return currentTool; }
+    public void ForceClearHand()
+    {
+        currentTool = ToolType.None;
+        heldToolObject = null;
+        ResetInteraction();
+        if (handPosition != null) handPosition.localRotation = Quaternion.identity;
+    }
 }
