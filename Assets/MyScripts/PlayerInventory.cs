@@ -1,139 +1,169 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.UI; // 이상현상 진행 ui 추가시 필요
-/* 기초설정
-
-
-player에 메인카메라, 손 위치 (empty GameObject) 추가
-그리고 습득할수있는 물건 프리팹에 Tools 스크립트 추가 및 ToolType 설정
-
-e키를 누르면 물건 습득, q키를 누르면 물건 드랍
-물건을 지니고있을때 e키 누를시 물건 스위칭
-*/
 
 public class PlayerInventory : MonoBehaviour
 {
-    //private AnomalyManager anomalyManager;
-    //플레이어가 소지한 도구
-    public ToolType currentTool = ToolType.None;
-    public Transform handPosition;      // 도구가 부착될 위치 (카메라 자식 오브젝트 추천)
-    public float interactDistance = 3f; // 상호작용 거리 ( 레이캐스팅
-    public float dropForce = 2.0f;
-    public float interactTime = 2.0f;
+    [Header("설정")]
+    public Transform handPosition;      // 도구가 부착될 위치 (MainCamera의 자식)
+    public float interactDistance = 5f; // 상호작용 거리
+    public float dropForce = 2.0f;      // 버릴 때 밀어내는 힘
+    public float interactTime = 2.0f;   // 꾹 눌러야 하는 시간 (2초)
 
-    public Slider progressSlider; // 상호작용 진행바 UI
-    public float wipeSpeed = 15f; // 닦는 속도
-    public float wipeAngle = 30f; // 닦는 각도
-    public float smashSpeed = 20f; // 내리찍는 속도
-    public float raiseAngle = -60f; // 망치 들어 올리는 각도 (뒤로 젖힘)
+    [Header("UI 연결")]
+    public GameObject crosshairDot;     // 평소에 보이는 흰 점 (Dot)
+    public GameObject progressUIObject; // 상호작용 때 켜질 도넛 부모 (InteractionUI)
+    public Image progressFillImage;     // 채워질 도넛 이미지 (FillImage)
+
+    [Header("상태")]
+    public ToolType currentTool = ToolType.None;
+    private GameObject heldToolObject = null;
+
     private Coroutine currentAnimCoroutine = null;
     private float currentInteractTimer = 0f;
-    // 이전에 들고 있던 도구 오브젝트 (스위칭 및 드랍을 위해 필요)
-    private GameObject heldToolObject = null;
-    /*void Start()
+
+    // 현재 들고 있는 도구의 기본 각도를 기억하는 변수 (손떨림 방지용)
+    private Quaternion currentGripRotation = Quaternion.identity;
+
+    [Header("모션 변수")]
+    public float wipeSpeed = 15f;
+    public float wipeAngle = 30f;
+    public float smashSpeed = 20f;
+    public float raiseAngle = -60f;
+
+    void Start()
     {
-        anomalyManager = FindFirstObjectByType<AnomalyManager>();
-        sceneLoader = FindFirstObjectByType<SceneLoader>();
+        // 게임 시작 시 UI 초기화
+        ResetInteraction();
     }
-    */
+
     void Update()
     {
-        TryInteract();
+        // 1. [즉시 실행] 문 열기 (E키 딸깍)
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TryOpenDoor();
+        }
 
-        // Q 키를 누르면 드랍
+        // 2. [지속 실행] 도구 줍기 & 이상현상 해결 (E키 꾹)
+        if (Input.GetKey(KeyCode.E))
+        {
+            TryContinuousInteract();
+        }
+        else if (Input.GetKeyUp(KeyCode.E))
+        {
+            ResetInteraction(); // 키 떼면 초기화
+        }
+
+        // 3. 버리기 (Q키)
         if (Input.GetKeyDown(KeyCode.Q))
         {
             DropTool();
         }
+
+        // [손떨림 방지] 아무것도 안 하고 있을 때는, 손을 '잡는 각도'로 부드럽게 유지
+        if (currentInteractTimer == 0 && currentTool != ToolType.None && handPosition != null)
+        {
+            // 닦는 중이 아닐 때만 원래 각도로 복귀 (코루틴 충돌 방지)
+            if (currentTool != ToolType.Towel || currentAnimCoroutine == null)
+            {
+                handPosition.localRotation = Quaternion.Lerp(handPosition.localRotation, currentGripRotation, Time.deltaTime * 10f);
+            }
+        }
     }
 
-    // E키 상호작용
-    private void TryInteract()
+    // 문 열기 (즉발)
+    private void TryOpenDoor()
     {
         RaycastHit hit;
-
-        // 레이캐스팅으로 도구 오브젝트 감지
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, interactDistance))
         {
-            // 상호작용한 도구가 'InteractableTool' 컴포넌트를 가지고 있는지 확인
-            Tools tool = hit.collider.GetComponent<Tools>();
-            AnomalyObject anomaly = hit.collider.GetComponent<AnomalyObject>();
             Door door = hit.collider.GetComponentInParent<Door>();
-
-            if (door != null && Input.GetKeyDown(KeyCode.E))
+            if (door != null)
             {
                 door.ToggleDoor();
-                return; // 문을 열었으면 다른 행동은 하지 않음
             }
+        }
+    }
 
-            if (tool != null || anomaly != null)
+    // 도구 줍기 + 이상현상 해결 (게이지 채우기)
+    private void TryContinuousInteract()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, interactDistance))
+        {
+            // A. 도구를 보고 있을 때 -> 2초 꾹 눌러서 습득
+            Tools tool = hit.collider.GetComponent<Tools>();
+            if (tool != null)
             {
-                // 이상현상인데 도구가 틀렸으면 무시
-                if (anomaly != null)
-                {
-                    // 정답 도구가 아니고 + 맨손도 아니라면 -> 반응 안 함 (모션 X)
-                    if (anomaly.requiredTool != currentTool && currentTool != ToolType.None)
-                    {
-                        
-                        return;
-                    }
-                }
-                // [E키 누르는 중]
-                if (Input.GetKey(KeyCode.E))
-                {
-                    // 도구별 애니메이션 실행 (닦기 등)
-                    PlayToolAnimation(true);
-
-                    // 타이머 증가
-                    currentInteractTimer += Time.deltaTime;
-
-                    // UI 업데이트
-                    if (progressSlider != null)
-                    {
-                        progressSlider.gameObject.SetActive(true);
-                        progressSlider.value = currentInteractTimer / interactTime;
-                    }
-
-                    // 2초 지나면 성공
-                    if (currentInteractTimer >= interactTime)
-                    {
-                        // 마무리 동작 (내리찍기 등)
-                        FinishToolAnimation();
-
-                        // 각자 기능 실행
-                        if (tool != null) SwitchTool(tool);
-                        if (door != null) door.ToggleDoor();
-                        if (anomaly != null) anomaly.TrySolveAnomaly(this);
-
-                        ResetInteraction(); // 초기화
-                    }
-                }
-                // e키 떼면 초기화
-                else if (Input.GetKeyUp(KeyCode.E))
-                {
-                    ResetInteraction();
-                }
+                ProcessInteractTimer(() => SwitchTool(tool));
                 return;
-
             }
+
+            // B. 이상현상을 보고 있을 때 -> 2초 꾹 눌러서 해결
+            AnomalyObject anomaly = hit.collider.GetComponent<AnomalyObject>();
+            if (anomaly != null)
+            {
+                // 조건: 정답 도구를 들고 있거나, 맨손이어도 되는 경우
+                if (currentTool != ToolType.None && anomaly.requiredTool == currentTool)
+                {
+                    PlayToolAnimation(true); // 도구 모션 재생
+                    ProcessInteractTimer(() => {
+                        FinishToolAnimation(); // 마무리 동작(내리찍기 등)
+                        anomaly.TrySolveAnomaly(this); // 해결 로직 실행
+                    });
+                    return;
+                }
+            }
+        }
+
+        // 아무것도 안 보고 있거나 조건이 안 맞으면 초기화
+        ResetInteraction();
+    }
+
+    // 타이머 및 UI 처리 공통 함수
+    private void ProcessInteractTimer(System.Action onComplete)
+    {
+        currentInteractTimer += Time.deltaTime;
+
+        // 1. 점 끄고 도넛 켜기
+        if (crosshairDot != null) crosshairDot.SetActive(false);
+        if (progressUIObject != null) progressUIObject.SetActive(true);
+
+        // 2. 도넛 채우기
+        if (progressFillImage != null)
+        {
+            progressFillImage.fillAmount = currentInteractTimer / interactTime;
+        }
+
+        // 3. 시간 다 되면 행동 실행
+        if (currentInteractTimer >= interactTime)
+        {
+            onComplete?.Invoke();
+            ResetInteraction();
         }
     }
 
     private void ResetInteraction()
     {
         currentInteractTimer = 0f;
-        if (progressSlider != null)
+
+        // 1. 도넛 끄고 비우기
+        if (progressUIObject != null)
         {
-            progressSlider.value = 0;
-            progressSlider.gameObject.SetActive(false);
+            progressFillImage.fillAmount = 0f;
+            progressUIObject.SetActive(false);
         }
+
+        // 2. 점 다시 켜기
+        if (crosshairDot != null) crosshairDot.SetActive(true);
+
         PlayToolAnimation(false); // 애니메이션 멈춤
     }
 
-
+    // [모션 관련] Hammel 오타 수정됨 -> Hammer
     private void PlayToolAnimation(bool isPlaying)
     {
-        // 수건(Towel)일 때 -> 닦는 모션
         if (currentTool == ToolType.Towel)
         {
             if (isPlaying)
@@ -147,44 +177,43 @@ public class PlayerInventory : MonoBehaviour
                 {
                     StopCoroutine(currentAnimCoroutine);
                     currentAnimCoroutine = null;
-                    if (handPosition) handPosition.localRotation = Quaternion.identity;
+                    // 코루틴 멈추면 Update에서 자동으로 currentGripRotation으로 돌아감
                 }
             }
         }
-        else if (currentTool == ToolType.Hammel)
+        else if (currentTool == ToolType.Hammer)
         {
             if (isPlaying && handPosition != null)
             {
                 float progress = Mathf.Clamp01(currentInteractTimer / interactTime);
-                Quaternion targetRot = Quaternion.Euler(raiseAngle, 0, 0); // 목표: 뒤로 젖힘
-
-                handPosition.localRotation = Quaternion.Slerp(Quaternion.identity, targetRot, progress);
+                // 기본 잡는 각도(currentGripRotation)에서 -> 뒤로 젖히는 각도(raiseAngle)로 변경
+                Quaternion targetRot = currentGripRotation * Quaternion.Euler(raiseAngle, 0, 0);
+                handPosition.localRotation = Quaternion.Slerp(currentGripRotation, targetRot, progress);
             }
-            else if (!isPlaying && handPosition != null)
-            {
-                handPosition.localRotation = Quaternion.Lerp(handPosition.localRotation, Quaternion.identity, Time.deltaTime * 10f);
-            }
+            // isPlaying이 false일 때는 Update문에서 자동으로 원래대로 돌아감
         }
     }
 
     private void FinishToolAnimation()
     {
-        // 해머일 때 -> 내리찍는 모션
-        if (currentTool == ToolType.Hammel)
+        if (currentTool == ToolType.Hammer)
         {
             StartCoroutine(SmashMotion());
         }
     }
 
-    // 모션 동작 코루틴
-
     IEnumerator WipeMotion()
     {
+        // 닦을 때도 기본 잡는 각도(currentGripRotation)를 기준으로 흔들어야 함
         Quaternion startRot = Quaternion.identity;
+        // startRot 대신 currentGripRotation을 써야 하지만, WipeMotion은 계속 도는 거라 
+        // 아래 while문 안에서 currentGripRotation을 반영함.
+
         while (true)
         {
             float z = Mathf.Sin(Time.time * wipeSpeed) * wipeAngle;
-            if (handPosition) handPosition.localRotation = startRot * Quaternion.Euler(0, 0, z);
+            if (handPosition)
+                handPosition.localRotation = currentGripRotation * Quaternion.Euler(0, 0, z);
             yield return null;
         }
     }
@@ -192,42 +221,46 @@ public class PlayerInventory : MonoBehaviour
     IEnumerator SmashMotion()
     {
         if (handPosition == null) yield break;
-
         float t = 0;
-        Quaternion startRot = handPosition.localRotation;
-        Quaternion upRot = Quaternion.Euler(-45, 0, 0);
 
-        // 찍기
-        Quaternion downRot = Quaternion.Euler(60, 0, 0);
+        // 시작: 현재 젖혀진 상태 / 목표: 내리찍은 상태
+        // (여기서 upRot은 현재 젖혀진 상태를 가져오는 게 자연스러움)
+        Quaternion startRot = handPosition.localRotation;
+        Quaternion downRot = currentGripRotation * Quaternion.Euler(60, 0, 0);
+
+        // 내리찍기
         while (t < 1)
         {
             t += Time.deltaTime * smashSpeed * 2;
-            handPosition.localRotation = Quaternion.Lerp(upRot, downRot, t);
+            handPosition.localRotation = Quaternion.Lerp(startRot, downRot, t);
             yield return null;
         }
-        //여기에 소리 추가를 하면 될거같습니다.
+
+        // 찍고 잠시 대기 (타격감)
         yield return new WaitForSeconds(0.2f);
+
+        // 복귀
         t = 0;
         while (t < 1)
         {
-            t += Time.deltaTime * 5f; // 부드럽게 복귀
-            handPosition.localRotation = Quaternion.Lerp(downRot, Quaternion.identity, t);
+            t += Time.deltaTime * 5f;
+            // 복귀할 때도 원래 잡는 각도(currentGripRotation)로 복귀
+            handPosition.localRotation = Quaternion.Lerp(downRot, currentGripRotation, t);
             yield return null;
         }
-        handPosition.localRotation = Quaternion.identity;
+        handPosition.localRotation = currentGripRotation;
     }
 
     private void SwitchTool(Tools newTool)
     {
-        // 1. 현재 도구가 있다면 (스위칭)
-        if (currentTool != ToolType.None)
-        {
-            DropTool();
-        }
+        // 이미 든 게 있으면 버림
+        if (currentTool != ToolType.None) DropTool();
 
-        // 2. 새로운 도구를 습득하고 상태 업데이트
         currentTool = newTool.toolType;
         heldToolObject = newTool.gameObject;
+
+        // [핵심] 잡는 각도 저장! (이게 있어야 손이 안 떨림)
+        currentGripRotation = Quaternion.Euler(newTool.gripRotation);
 
         if (handPosition != null)
         {
@@ -237,79 +270,61 @@ public class PlayerInventory : MonoBehaviour
         }
         else
         {
-            // handPosition이 없다면 오브젝트를 숨김
             heldToolObject.SetActive(false);
         }
 
-        Debug.Log($"도구 스위칭: {newTool.toolType} 습득.");
-
-        //물체 물리효과 비활성화
+        // 물리 끄기
         Rigidbody rb = heldToolObject.GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
-
         Collider col = heldToolObject.GetComponent<Collider>();
         if (col != null) col.enabled = false;
+
+        Debug.Log($"도구 습득: {newTool.toolType}");
     }
 
-
-    // Q키 상호작용
     public void DropTool()
     {
         if (currentTool != ToolType.None && heldToolObject != null)
         {
-            // 1. 손에서 해제 및 월드 좌표계로 복귀
             heldToolObject.transform.SetParent(null);
+            heldToolObject.SetActive(true);
 
-            // 2. 물리 활성화 및 힘 부여
             Rigidbody rb = heldToolObject.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.isKinematic = false; // 물리 엔진에 다시 맡김
-
-                // 플레이어의 시야 방향(Camera.main.transform.forward)으로 힘을 가해 살짝 밀어냅니다.
+                rb.isKinematic = false;
                 rb.AddForce(Camera.main.transform.forward * dropForce, ForceMode.Impulse);
             }
-
-            // 3. 콜라이더 활성화 (바닥과 충돌하고 다시 주울 수 있게)
             Collider col = heldToolObject.GetComponent<Collider>();
             if (col != null) col.enabled = true;
 
-            // 4. 인벤토리 상태 초기화
             currentTool = ToolType.None;
             heldToolObject = null;
-            Debug.Log("도구를 내려놓았습니다.");
-        }
-        else
-        {
-            Debug.Log("내려놓을 도구가 없습니다.");
+
+            // 손 각도 초기화 (빈손)
+            if (handPosition != null) handPosition.localRotation = Quaternion.identity;
+            currentGripRotation = Quaternion.identity;
+
+            Debug.Log("도구 버림");
         }
     }
 
-
-    //도구 사용 및 파괴 (AnomalyObject에서 호출- 이상현상에 맞는 도구면 호출, 아닐시 페널티 부여)
     public void DestroyToolUsed()
     {
         if (currentTool != ToolType.None)
         {
-            Debug.Log($"{currentTool}이(가) 이상현상 해결에 사용되어 파괴되었습니다.");
-
-            // 1. 오브젝트 파괴
-            if (heldToolObject != null)
-            {
-                Destroy(heldToolObject);
-            }
-
-            // 2. 인벤토리 상태 초기화
+            if (heldToolObject != null) Destroy(heldToolObject);
             currentTool = ToolType.None;
             heldToolObject = null;
+
+            // 손 각도 초기화
+            if (handPosition != null) handPosition.localRotation = Quaternion.identity;
+            currentGripRotation = Quaternion.identity;
         }
     }
 
-    // 외부 스크립트(AnomalyObject)가 현재 소지 도구를 확인하기 위한 함수
     public ToolType GetCurrentTool()
     {
         return currentTool;
     }
 }
-
-//플레이어에 연결
