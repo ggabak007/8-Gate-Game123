@@ -7,6 +7,7 @@ public class Tools : MonoBehaviour
     public GameObject toolPrefab;
     public Vector3 gripRotation = Vector3.zero;
     public Vector3 gripPosition = Vector3.zero;
+    public bool isAnomalyItem = false;
     void Start()
     {
         // 디버깅용 코드

@@ -61,6 +61,13 @@ public class AnomalyManager : MonoBehaviour
 
     private void CalculateAnomalyChance()
     {
+        if (GameManager.Instance != null && GameManager.Instance.currentStageIndex == 1)
+        {
+            Is_Anomaly_Present = false;
+            Debug.Log("<color=cyan>[1일차] 튜토리얼: 무조건 정상 스테이지입니다.</color>");
+            return; // 
+        }
+
         int randomValue = Random.Range(0, 100);
 
         if (randomValue < ANOMALY_THRESHOLD)

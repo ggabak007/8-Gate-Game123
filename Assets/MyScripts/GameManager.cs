@@ -32,6 +32,12 @@ public class GameManager : MonoBehaviour
     {
         if (anomalyManager == null)
             anomalyManager = FindFirstObjectByType<AnomalyManager>();
+        toolManager = FindFirstObjectByType<ToolManager>();
+        if (toolManager == null)
+        {
+            // 씬에 ToolManager가 없으면 경고 (하지만 게임은 계속되게)
+            Debug.LogWarning("GameManager: 씬에서 ToolManager를 찾을 수 없습니다! 도구 리셋이 작동하지 않습니다.");
+        }
 
         StartNewDay();
     }
@@ -44,17 +50,7 @@ public class GameManager : MonoBehaviour
         {
             anomalyManager.FullResetPool();
         }
-        // 1. 이상현상 리셋 & 생성
-        if (anomalyManager != null)
-        {
-            anomalyManager.ResetStage();
-
-            // [추가된 부분] 이상현상 유무에 따라 코너 벽 교체
-            // 이상현상이 있으면 -> Block(Return)을 켜서 못 지나가게 함
-            // 이상현상이 없으면 -> Pass(Exit)를 켜서 지나가게 함
-            bool isAnomaly = anomalyManager.Is_Anomaly_Present;
-            SetCornerTriggers(isAnomaly);
-        }
+        
         if (toolManager != null)
         {
             toolManager.ResetAllTools();
@@ -67,6 +63,15 @@ public class GameManager : MonoBehaviour
             // 인벤토리 변수만 초기화 
             inv.ForceClearHand(); 
         }
+        if (anomalyManager != null)
+        {
+            anomalyManager.ResetStage();
+
+            // [추가된 부분] 이상현상 유무에 따라 코너 벽 교체
+            bool isAnomaly = anomalyManager.Is_Anomaly_Present;
+            SetCornerTriggers(isAnomaly);
+        }
+
         // 2. 플레이어 위치 이동 (오프셋 적용 - 님이 만드신 로직 유지)
         if (player != null && startPoint != null)
         {

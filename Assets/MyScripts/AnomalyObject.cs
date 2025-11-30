@@ -8,6 +8,7 @@ public class AnomalyObject : MonoBehaviour
     public GameObject objectToShow; // (침대 위 인형)
     public Texture cleanTexture;
     public Material cleanMaterial;
+    public GameObject itemToSpawn;
     // 문을 닫아야 해결되는지 여부( 이상현상중 사람 모형이 바깥에 꺼내져있을떄 지정된 냉장고(문이 열려있음) 에 넣고 문을 닫으면 True(해결)
     public bool solveOnDoorClose = false; 
     public bool isReadyToSolve = false;   // 인형은 놓았는데 문을 아직 안 닫은 상태
@@ -111,12 +112,12 @@ public class AnomalyObject : MonoBehaviour
         // GetComponent<Renderer>().material.mainTexture = cleanTexture; - 텍스쳐 교체 ( 추가 변수 및 컴포넌트 필요 )
 
         // [Element 0] : 낙서 지우기
-        if (anomalyID == 0)
+        if (anomalyID == 2)
         {
-            Destroy(gameObject, 0.1f);
+            gameObject.SetActive(false);
         }
         // [Element 1] : 그림 부수기
-        else if (anomalyID == 1)
+        else if (anomalyID == 0)
         {
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)
@@ -135,9 +136,10 @@ public class AnomalyObject : MonoBehaviour
             }
         }
         // [Element 2] : 오브젝트 켜기 (시체, 인형 등)
-        else if (anomalyID == 2)
+        else if (anomalyID == 1)
         {
             if (objectToShow != null) objectToShow.SetActive(true);
+            Debug.Log("[1번 시체] 냉장고 안 시체 켜짐");
         }
     }
 

@@ -723,80 +723,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6859168966316910194, guid: 965116911a59be64bbd36126982acf5a, type: 3}
   m_PrefabInstance: {fileID: 2059186515}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &144185804
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144185801}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!33 &144185805
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144185801}
-  m_Mesh: {fileID: -4090796778096843068, guid: f5970be66cc15064d918b11ddaf45405, type: 3}
---- !u!23 &144185806
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144185801}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!54 &144185807
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1616,6 +1542,7 @@ MonoBehaviour:
   objectToShow: {fileID: 1966438604}
   cleanTexture: {fileID: 0}
   cleanMaterial: {fileID: 0}
+  itemToSpawn: {fileID: 0}
   solveOnDoorClose: 1
   isReadyToSolve: 0
   doorToOpen: {fileID: 1096759004}
@@ -1877,6 +1804,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1430802700187283842, guid: f18c27854ef51624cab4562bc71a3b38, type: 3}
+      propertyPath: isAnomalyItem
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2066112123240783313, guid: f18c27854ef51624cab4562bc71a3b38, type: 3}
       propertyPath: m_Name
       value: SK_Body_Skin1 (1)
@@ -3943,6 +3874,7 @@ MonoBehaviour:
   objectToShow: {fileID: 0}
   cleanTexture: {fileID: 0}
   cleanMaterial: {fileID: 0}
+  itemToSpawn: {fileID: 0}
   solveOnDoorClose: 0
   isReadyToSolve: 0
   doorToOpen: {fileID: 0}
@@ -6552,6 +6484,7 @@ MonoBehaviour:
   toolPrefab: {fileID: 6859168966316910194, guid: 965116911a59be64bbd36126982acf5a, type: 3}
   gripRotation: {x: 11, y: 188, z: 140}
   gripPosition: {x: 0, y: 0.2, z: 0.5}
+  isAnomalyItem: 0
 --- !u!54 &1496802993
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8095,9 +8028,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anomalyObjects:
-  - {fileID: 1468543660}
   - {fileID: 1838802861}
   - {fileID: 1005580531}
+  - {fileID: 1468543660}
 --- !u!4 &1801425265
 Transform:
   m_ObjectHideFlags: 0
@@ -8393,6 +8326,7 @@ MonoBehaviour:
   objectToShow: {fileID: 0}
   cleanTexture: {fileID: 0}
   cleanMaterial: {fileID: 0}
+  itemToSpawn: {fileID: 0}
   solveOnDoorClose: 0
   isReadyToSolve: 0
   doorToOpen: {fileID: 0}
@@ -9152,6 +9086,7 @@ MonoBehaviour:
   toolPrefab: {fileID: 881101982}
   gripRotation: {x: 0, y: 0, z: 0}
   gripPosition: {x: 0, y: 0, z: 0}
+  isAnomalyItem: 0
 --- !u!65 &1962956268
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9270,6 +9205,7 @@ MonoBehaviour:
   objectToShow: {fileID: 0}
   cleanTexture: {fileID: 0}
   cleanMaterial: {fileID: 0}
+  itemToSpawn: {fileID: 0}
   solveOnDoorClose: 0
   isReadyToSolve: 0
   doorToOpen: {fileID: 0}
@@ -9417,7 +9353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1465366837488823368, guid: 965116911a59be64bbd36126982acf5a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.962
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 1465366837488823368, guid: 965116911a59be64bbd36126982acf5a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9483,19 +9419,11 @@ PrefabInstance:
       propertyPath: toolPrefab
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7007027894115937504, guid: 965116911a59be64bbd36126982acf5a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6859168966316910194, guid: 965116911a59be64bbd36126982acf5a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 144185806}
-    - targetCorrespondingSourceObject: {fileID: 6859168966316910194, guid: 965116911a59be64bbd36126982acf5a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 144185805}
-    - targetCorrespondingSourceObject: {fileID: 6859168966316910194, guid: 965116911a59be64bbd36126982acf5a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 144185804}
     - targetCorrespondingSourceObject: {fileID: 6859168966316910194, guid: 965116911a59be64bbd36126982acf5a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 144185807}

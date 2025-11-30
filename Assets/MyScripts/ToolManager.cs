@@ -8,6 +8,7 @@ public class ToolManager : MonoBehaviour
     {
         public GameObject toolObj;
         public Vector3 startPos;
+        public Tools toolScript;
         public Quaternion startRot;
         public Transform originalParent; // 원래 부모 (필요시)
     }
@@ -17,7 +18,7 @@ public class ToolManager : MonoBehaviour
     void Start()
     {
         // 1. 씬에 있는 모든 도구(Tools 스크립트 붙은 것)를 찾음
-        Tools[] foundTools = FindObjectsByType<Tools>(FindObjectsSortMode.None);
+        Tools[] foundTools = FindObjectsByType<Tools>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         foreach (Tools t in foundTools)
         {
@@ -25,6 +26,7 @@ public class ToolManager : MonoBehaviour
             ToolData data = new ToolData();
             data.toolObj = t.gameObject;
             data.startPos = t.transform.position;
+            data.toolScript = t;
             data.startRot = t.transform.rotation;
             data.originalParent = t.transform.parent;
 
@@ -56,8 +58,14 @@ public class ToolManager : MonoBehaviour
                 if (col != null) col.enabled = true;
 
                 // 3. 다시 켜기 (활성화)
-
-                data.toolObj.SetActive(true);
+                if (data.toolScript.isAnomalyItem)
+                {
+                    data.toolObj.SetActive(false); // 숨김
+                }
+                else
+                {
+                    data.toolObj.SetActive(true);  // 보임 (수건, 망치 등)
+                }
             }
         }
     }
