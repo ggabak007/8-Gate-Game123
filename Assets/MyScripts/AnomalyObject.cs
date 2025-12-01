@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Collider))] //콜라이더 자동 추가
 public class AnomalyObject : MonoBehaviour
 {
 
     public ToolType requiredTool = ToolType.None; //발생한 이상현상을 해결할 때 필요한 도구 타입
-    public GameObject objectToShow; // (침대 위 인형)
+    public GameObject objectToShow;
+    public GameObject objectToHide;// (침대 위 인형)
     public Texture cleanTexture;
     public Material cleanMaterial;
     public GameObject itemToSpawn;
@@ -16,10 +18,17 @@ public class AnomalyObject : MonoBehaviour
     // 이상현상 해결여부
     private bool isResolved = false;
     public int anomalyID = 0;
+    private Vector3 initialPos;
+    private Quaternion initialRot;
 
     private AnomalyManager anomalyManager; // 이상현상 해결 참조를 위해 필요
     private PlayerInventory playerInventory; // 플레이어가 가진 도구 확인 및 사용한 도구 처리(파괴)
 
+    void Awake()
+    {
+        initialPos = transform.position;
+        initialRot = transform.rotation;
+    }
     void Start()
     {
         // 필요 인스턴스 연결
@@ -104,43 +113,57 @@ public class AnomalyObject : MonoBehaviour
     //그림은 바닥으로 떨어뜨리고 부신다거나, 낙서는 깨끗하게 지워지는 연출 등 구현
     private void ExecuteAnomalyFix()
     {
-        // 예시 1: 오브젝트 자체를 파괴하거나 숨김 (그림 액자를 떼어낸 경우)
-        // gameObject.SetActive(false); - 오브젝트를 씬에서 숨긴다.
-        // Destroy(gameObject); - 오브젝트를 완전히 파괴한다.
+        Debug.Log($"[해결 시도] {gameObject.name} 로직 실행 중...");
 
-        // 예시 2: 텍스처를 깨끗한 것으로 변경 (창문 낙서를 닦은 경우)
-        // GetComponent<Renderer>().material.mainTexture = cleanTexture; - 텍스쳐 교체 ( 추가 변수 및 컴포넌트 필요 )
-
-        // [Element 0] : 낙서 지우기
-        if (anomalyID == 2)
+        // 1. [시체/인형] : 켤 물체가 연결되어 있다면? -> 무조건 켬!
+        if (objectToShow != null)
         {
-            gameObject.SetActive(false);
+            objectToShow.SetActive(true);
+            Debug.Log(">> 성공: 시체(ObjectToShow)를 켰습니다!");
+            return; // 여기서 끝! (아래 코드 실행 안 함)
         }
-        // [Element 1] : 그림 부수기
-        else if (anomalyID == 0)
+        else
         {
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
+            // 혹시 연결을 까먹었을까봐 경고 로그 띄움
+            Debug.LogWarning(">> 주의: Object To Show가 비어있습니다! 시체를 연결하세요.");
+        }
+
+        // 2. [낙서] : 텍스처 변경이 있다면?
+        if (cleanTexture != null || cleanMaterial != null)
+        {
+            Renderer ren = GetComponent<Renderer>();
+            if (ren != null)
             {
-                // 1. 물리 엔진 켜기 (벽에서 떨어짐)
-                rb.isKinematic = false;
-                rb.useGravity = true;
-
-                // 2. 플레이어 반대 방향(벽 쪽)이나 앞쪽으로 튕겨 나가게 힘주기
-                rb.AddForce(-transform.forward * 5.0f, ForceMode.Impulse);
-
-                // 3. 빙글빙글 돌며 떨어짐
-                rb.AddTorque(Random.insideUnitSphere * 10.0f, ForceMode.Impulse);
-                Destroy(gameObject, 1.0f);
-                Debug.Log("파괴됨");
+                if (cleanTexture != null) ren.material.mainTexture = cleanTexture;
+                else if (cleanMaterial != null) ren.material = cleanMaterial;
             }
+            else
+            {
+                StartCoroutine(HideObject(0.1f));
+            }
+            return;
         }
-        // [Element 2] : 오브젝트 켜기 (시체, 인형 등)
-        else if (anomalyID == 1)
+
+        // 3. [액자] : 위 둘 다 아니라면 물리 파괴!
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            if (objectToShow != null) objectToShow.SetActive(true);
-            Debug.Log("[1번 시체] 냉장고 안 시체 켜짐");
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.AddForce(-transform.forward * 5.0f, ForceMode.Impulse);
+            rb.AddTorque(Random.insideUnitSphere * 10.0f, ForceMode.Impulse);
+            StartCoroutine(HideObject(2.0f));
         }
+        else
+        {
+            StartCoroutine(HideObject(0.1f));
+        }
+    }
+
+    IEnumerator HideObject(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(false);
     }
 
 
@@ -152,10 +175,37 @@ public class AnomalyObject : MonoBehaviour
 
     private void OnEnable()
     {
-        // 만약 연결된 문이 있다면, 강제로 열어둔다!
+        Debug.Log($"[이상현상 발생] {gameObject.name} 활성화됨!");
+
+        // 1. 문 열기 (연결되어 있으면 무조건 염)
         if (doorToOpen != null)
         {
-            doorToOpen.SetOpenState();
+            doorToOpen.UnlockAndOpen();
+        }
+
+        // 2. 바닥 도구 켜기 (연결되어 있으면 무조건 켬)
+        if (itemToSpawn != null)
+        {
+            itemToSpawn.SetActive(true);
+        }
+
+        // 3. ★ 시체 숨기기 (연결되어 있으면 무조건 숨김!)
+        // (ID 1번인지 검사 안 함 -> 연결만 되어있으면 작동)
+        if (objectToHide != null)
+        {
+            objectToHide.SetActive(false);
+            Debug.Log(">> 시체(ObjectToHide)를 숨겼습니다.");
+        }
+
+        // 4. 액자 리셋 (리지드바디가 있으면 무조건 리셋)
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            transform.position = initialPos;
+            transform.rotation = initialRot;
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+            gameObject.SetActive(true);
         }
     }
 

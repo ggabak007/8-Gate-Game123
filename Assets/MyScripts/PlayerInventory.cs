@@ -25,6 +25,10 @@ public class PlayerInventory : MonoBehaviour
     public float wipeAngle = 30f;
     public float smashSpeed = 20f;
     public float raiseAngle = -60f;
+    public float soundVolume = 0.2f;
+    public AudioSource audioSource; // 플레이어에게 붙어있는 AudioSource 컴포넌트
+    public AudioClip wipeSound;    
+    public AudioClip smashSound;    
 
     void Start()
     {
@@ -124,47 +128,61 @@ public class PlayerInventory : MonoBehaviour
 
     // --- 아래는 모션 및 도구 처리 (기존 코드 유지) ---
 
+    // PlayerInventory.cs
+
     private void PlayToolAnimation(bool isPlaying)
     {
-        if (currentTool == ToolType.Towel)
+        if (!isPlaying)
         {
-            if (isPlaying)
-            {
-                if (currentAnimCoroutine == null) currentAnimCoroutine = StartCoroutine(WipeMotion());
-            }
-            else
-            {
-                if (currentAnimCoroutine != null)
-                {
-                    StopCoroutine(currentAnimCoroutine);
-                    currentAnimCoroutine = null;
-                    if (handPosition) handPosition.localRotation = Quaternion.identity;
-                }
-            }
-            return;
-        }
-        else if (currentTool == ToolType.Hammer) // Hammel 오타 수정
-        {
-            if (isPlaying && handPosition != null)
-            {
-                float progress = Mathf.Clamp01(currentInteractTimer / interactTime);
-                Quaternion targetRot = Quaternion.Euler(raiseAngle, 0, 0);
-                handPosition.localRotation = Quaternion.Slerp(Quaternion.identity, targetRot, progress);
-            }
-            else if (!isPlaying && handPosition != null)
-            {
-                handPosition.localRotation = Quaternion.Lerp(handPosition.localRotation, Quaternion.identity, Time.deltaTime * 10f);
-            }
-        }
-        else
-        {
-            // 혹시라도 수건 코루틴이 남아있으면 끔
+            // 애니메이션 중단
             if (currentAnimCoroutine != null)
             {
                 StopCoroutine(currentAnimCoroutine);
                 currentAnimCoroutine = null;
                 if (handPosition) handPosition.localRotation = Quaternion.identity;
             }
+
+            // (망치 소리는 PlayOneShot이라 굳이 안 꺼도 자연스럽게 끝남)
+            if (audioSource.isPlaying && audioSource.clip == wipeSound)
+            {
+                audioSource.Stop();
+                audioSource.loop = false; // 반복 끄기 (중요!)
+                audioSource.clip = null;  // 클립 비우기
+            }
+            return;
+        }
+
+
+        // [수건] : 닦는 모션 + 연속 소리
+        if (currentTool == ToolType.Towel)
+        {
+            // 모션 시작
+            if (currentAnimCoroutine == null)
+                currentAnimCoroutine = StartCoroutine(WipeMotion());
+
+            //  재생 시작
+            if (!audioSource.isPlaying && wipeSound != null)
+            {
+                audioSource.clip = wipeSound; // 1. 수건 소리 장착
+                audioSource.loop = true;      // 2. 무한 반복 설정
+                audioSource.volume = soundVolume; // 3. 볼륨 설정
+                audioSource.Play();           // 4. 재생 시작
+            }
+        }
+        // [망치] : 들어 올리는 모션 (소리 없음)
+        else if (currentTool == ToolType.Hammer)
+        {
+            if (handPosition != null)
+            {
+                float progress = Mathf.Clamp01(currentInteractTimer / interactTime);
+                Quaternion targetRot = Quaternion.Euler(raiseAngle, 0, 0);
+                handPosition.localRotation = Quaternion.Slerp(Quaternion.identity, targetRot, progress);
+            }
+        }
+        // 그 외
+        else
+        {
+            PlayToolAnimation(false);
         }
     }
 
@@ -173,29 +191,51 @@ public class PlayerInventory : MonoBehaviour
         if (currentTool == ToolType.Hammer) StartCoroutine(SmashMotion());
     }
 
+    // 닦기 모션 
     IEnumerator WipeMotion()
     {
         Quaternion startRot = Quaternion.identity;
+
         while (true)
         {
-            float z = Mathf.Sin(Time.time * wipeSpeed) * wipeAngle;
-            if (handPosition) handPosition.localRotation = startRot * Quaternion.Euler(0, 0, z);
+            float wave = Mathf.Sin(Time.time * wipeSpeed) * wipeAngle;
+
+            if (handPosition)
+                handPosition.localRotation = startRot * Quaternion.Euler(0, 0, wave);
+
+
             yield return null;
         }
     }
 
-    IEnumerator SmashMotion()
+    IEnumerator SmashMotion() // 해머 모션
     {
         if (handPosition == null) yield break;
         float t = 0;
+        Quaternion startRot = handPosition.localRotation;
         Quaternion upRot = Quaternion.Euler(-45, 0, 0);
         Quaternion downRot = Quaternion.Euler(60, 0, 0);
 
         while (t < 1) { t += Time.deltaTime * smashSpeed * 2; handPosition.localRotation = Quaternion.Lerp(upRot, downRot, t); yield return null; }
         yield return new WaitForSeconds(0.2f);
         t = 0;
-        while (t < 1) { t += Time.deltaTime * 5f; handPosition.localRotation = Quaternion.Lerp(downRot, Quaternion.identity, t); yield return null; }
+
+        while (t < 1)
+        {
+            t += Time.deltaTime * 5f;
+            handPosition.localRotation = Quaternion.Lerp(downRot, Quaternion.identity, t);
+        }
+            
+                if (audioSource != null && smashSound != null)
+                {
+                    Debug.Log("소리 재생 시도!");
+                    audioSource.pitch = Random.Range(0.5f, 0.50001f); // 묵직하게 낮은 음
+                    audioSource.PlayOneShot(smashSound);
+                }
+        
+        yield return new WaitForSeconds(0.2f);
         handPosition.localRotation = Quaternion.identity;
+        
     }
 
     private void SwitchTool(Tools newTool)

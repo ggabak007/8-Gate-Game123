@@ -4,16 +4,25 @@ public class Door : MonoBehaviour
 {
     public float openAngle = 90f;
     public float smoothSpeed = 2.0f; // 문이 열리는 속도 (클수록 빠름)
+    public bool lockOnStart = false;
 
     public AudioClip doorSound;      // 문 열리고 닫힐 때 나는 소리
     public AnomalyObject linkedAnomaly; // 냉장고 안의 침대(이상현상)를 여기에 연결
 
     // 내부 변수
     private bool isOpen = false;
+    private bool isLocked = false;
     private Quaternion defaultRotation; // 닫혀있을 때의 회전값 (0도)
     private Quaternion targetRotation;  // 목표 회전값
     private AudioSource audioSource;
 
+    void Awake()
+    {
+        defaultRotation = transform.localRotation;
+        targetRotation = defaultRotation;
+        audioSource = GetComponent<AudioSource>();
+        isLocked = lockOnStart; // 잠금 설정 적용
+    }
     void Start()
     {
         // 게임 시작 시 현재 각도를 '닫힌 상태'로 기억
@@ -47,6 +56,10 @@ public class Door : MonoBehaviour
                 linkedAnomaly.FinalizeSolve(); // 최종 해결 처리!
             }
         }
+        if (audioSource != null && doorSound != null)
+        {
+            audioSource.PlayOneShot(doorSound);
+        }
     }
 
     // [트리거용] 문을 강제로 닫을 때 호출 (루프 연출용)
@@ -68,6 +81,12 @@ public class Door : MonoBehaviour
         }
     }
 
+    // 
+    public void UnlockAndOpen()
+    {
+        isLocked = false; // 잠금 해제
+        SetOpenState();   // 문 열기
+    }
     public void SetOpenState()
     {
         isOpen = true; // 열린 상태로 변경
