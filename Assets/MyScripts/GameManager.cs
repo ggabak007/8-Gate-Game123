@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         {
             anomalyManager.FullResetPool();
         }
-        
+
         if (toolManager != null)
         {
             toolManager.ResetAllTools();
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         if (inv != null)
         {
             // 인벤토리 변수만 초기화 
-            inv.ForceClearHand(); 
+            inv.ForceClearHand();
         }
         if (anomalyManager != null)
         {

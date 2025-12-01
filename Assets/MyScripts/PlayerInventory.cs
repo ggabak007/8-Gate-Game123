@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -28,7 +29,10 @@ public class PlayerInventory : MonoBehaviour
     public float soundVolume = 0.2f;
     public AudioSource audioSource; // 플레이어에게 붙어있는 AudioSource 컴포넌트
     public AudioClip wipeSound;    
-    public AudioClip smashSound;    
+    public AudioClip smashSound;
+
+    //UI
+    public TextMeshProUGUI interactionText;
 
     void Start()
     {
@@ -37,18 +41,8 @@ public class PlayerInventory : MonoBehaviour
 
     void Update()
     {
-        // 1. 상호작용 (E키)
-        // 문 열기는 즉시, 도구/이상현상은 상황에 따라 처리
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetKey(KeyCode.E))
-        {
-            TryInteract();
-        }
-
-        // 2. 키 뗐을 때 초기화
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            ResetInteraction();
-        }
+        interactionText.enabled = false;
+        TryInteract();
 
         // 3. 버리기 (Q키)
         if (Input.GetKeyDown(KeyCode.Q))
@@ -64,24 +58,36 @@ public class PlayerInventory : MonoBehaviour
         {
             // A. 문 (Door) - 즉시 열림
             Door door = hit.collider.GetComponentInParent<Door>();
-            if (door != null && Input.GetKeyDown(KeyCode.E))
+            if (door != null)
             {
-                door.ToggleDoor();
-                return;
+                interactionText.text = "E : open/close";
+                interactionText.enabled = true;
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    door.ToggleDoor();
+                    return;
+                }
             }
 
             // B. 도구 (Tools) - 즉시 습득 (님 요청대로 2초 딜레이 뺌)
             Tools tool = hit.collider.GetComponent<Tools>();
-            if (tool != null && Input.GetKeyDown(KeyCode.E))
+            if (tool != null)
             {
-                SwitchTool(tool);
-                return;
+                interactionText.text = "E : get";
+                interactionText.enabled = true;
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    SwitchTool(tool);
+                    return;
+                }
             }
 
             // C. 이상현상 (Anomaly) - 2초 꾹
             AnomalyObject anomaly = hit.collider.GetComponent<AnomalyObject>();
             if (anomaly != null)
             {
+                interactionText.text = "E : interact";
+                interactionText.enabled = true;
                 // 조건: 도구가 맞거나 맨손이어도 되는 경우
                 if (currentTool != ToolType.None && anomaly.requiredTool == currentTool)
                 {
