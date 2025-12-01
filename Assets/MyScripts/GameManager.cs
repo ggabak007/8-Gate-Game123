@@ -38,15 +38,17 @@ public class GameManager : MonoBehaviour
             // 씬에 ToolManager가 없으면 경고 (하지만 게임은 계속되게)
             Debug.LogWarning("GameManager: 씬에서 ToolManager를 찾을 수 없습니다! 도구 리셋이 작동하지 않습니다.");
         }
-
+            
         StartNewDay();
     }
 
     // [핵심] 하루 시작 (위치 이동 + 트리거 교체)
     public void StartNewDay(Vector3 offset = default(Vector3))
     {
+        
 
         Debug.Log($"{currentStageIndex}일차 시작");
+        StartCoroutine(DayLoadingManager.Instance.ShowDayLoading(currentStageIndex));
         if (currentStageIndex == 1)
         {
             anomalyManager.FullResetPool();
