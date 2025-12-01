@@ -164,7 +164,6 @@ public class PlayerInventory : MonoBehaviour
             if (!audioSource.isPlaying && wipeSound != null)
             {
                 audioSource.clip = wipeSound; // 1. 수건 소리 장착
-                audioSource.loop = true;      // 2. 무한 반복 설정
                 audioSource.volume = soundVolume; // 3. 볼륨 설정
                 audioSource.Play();           // 4. 재생 시작
             }

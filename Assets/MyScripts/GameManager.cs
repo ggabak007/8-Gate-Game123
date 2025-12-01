@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     // [핵심] 하루 시작 (위치 이동 + 트리거 교체)
     public void StartNewDay(Vector3 offset = default(Vector3))
     {
+
         Debug.Log($"{currentStageIndex}일차 시작");
         if (currentStageIndex == 1)
         {
