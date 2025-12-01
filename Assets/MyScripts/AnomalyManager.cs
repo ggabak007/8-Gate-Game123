@@ -85,7 +85,7 @@ public class AnomalyManager : MonoBehaviour
         }
     }
 
-    // ★ [핵심 수정] 남은 것 중에서만 뽑기
+    // 리스트에 남은 이상현상만 뽑기
     private void SpawnRandomAnomaly()
     {
         if (anomalyObjects == null || anomalyObjects.Length == 0) return;

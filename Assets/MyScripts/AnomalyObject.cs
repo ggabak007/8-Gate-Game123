@@ -10,6 +10,9 @@ public class AnomalyObject : MonoBehaviour
     public GameObject objectToHide;// (침대 위 인형)
     public Texture cleanTexture;
     public Material cleanMaterial;
+
+    public float currentFixTime = 0f;
+    public float requiredTime = 2.0f; // ★ 설정: 해결하는 데 걸리는 시간 (초)
     public GameObject itemToSpawn;
     // 문을 닫아야 해결되는지 여부( 이상현상중 사람 모형이 바깥에 꺼내져있을떄 지정된 냉장고(문이 열려있음) 에 넣고 문을 닫으면 True(해결)
     public bool solveOnDoorClose = false; 
@@ -208,11 +211,12 @@ public class AnomalyObject : MonoBehaviour
             gameObject.SetActive(true);
         }
     }
-
+  
     public void SetAnomalyID(int id)
     {
         anomalyID = id;
         Debug.Log($"[AnomalyObject] ID가 {id}번으로 자동 설정되었습니다.");
     }
 
+    
 }

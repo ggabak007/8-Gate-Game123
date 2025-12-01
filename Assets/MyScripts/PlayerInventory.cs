@@ -9,6 +9,7 @@ public class PlayerInventory : MonoBehaviour
     public float interactDistance = 5f;
     public float dropForce = 2.0f;
     public float interactTime = 2.0f;
+    private bool isSoundPlayingState = false;
 
     [Header("UI (기본 슬라이더)")]
     public Slider progressSlider; // 아까 쓰시던 기본 슬라이더
@@ -132,9 +133,10 @@ public class PlayerInventory : MonoBehaviour
 
     private void PlayToolAnimation(bool isPlaying)
     {
+        // 1. [멈춤 요청] 손을 뗐거나, 조준이 빗나갔을 때
         if (!isPlaying)
         {
-            // 애니메이션 중단
+            // 모션 정지
             if (currentAnimCoroutine != null)
             {
                 StopCoroutine(currentAnimCoroutine);
@@ -142,46 +144,47 @@ public class PlayerInventory : MonoBehaviour
                 if (handPosition) handPosition.localRotation = Quaternion.identity;
             }
 
-            // (망치 소리는 PlayOneShot이라 굳이 안 꺼도 자연스럽게 끝남)
-            if (audioSource.isPlaying && audioSource.clip == wipeSound)
+            // 소리가 켜져있었다면 끈다
+            if (isSoundPlayingState)
             {
                 audioSource.Stop();
-                audioSource.loop = false; // 반복 끄기 (중요!)
-                audioSource.clip = null;  // 클립 비우기
+                audioSource.loop = false;
+                audioSource.clip = null;
+                isSoundPlayingState = false; // "나 껐어!" 기억
             }
             return;
         }
 
-
-        // [수건] : 닦는 모션 + 연속 소리
+        // 2. [재생 요청] 수건으로 닦고 있을 때
         if (currentTool == ToolType.Towel)
         {
             // 모션 시작
             if (currentAnimCoroutine == null)
                 currentAnimCoroutine = StartCoroutine(WipeMotion());
 
-            //  재생 시작
-            if (!audioSource.isPlaying && wipeSound != null)
+            // ★핵심 해결법★
+            // "소리가 켜진 상태(isSoundPlayingState)"가 아니라면 -> 켠다!
+            // 이미 켜져 있다면(true) -> 아무것도 안 하고 내버려 둔다! (끊김 방지)
+            if (!isSoundPlayingState)
             {
-                audioSource.clip = wipeSound; // 1. 수건 소리 장착
-                audioSource.volume = soundVolume; // 3. 볼륨 설정
-                audioSource.Play();           // 4. 재생 시작
+                audioSource.clip = wipeSound;
+                audioSource.loop = true; // 끊기지 않게 반복 설정
+                audioSource.volume = soundVolume;
+                audioSource.Play();
+
+                isSoundPlayingState = true; // "나 켰어!" 기억
             }
         }
-        // [망치] : 들어 올리는 모션 (소리 없음)
+        // [망치] 로직
         else if (currentTool == ToolType.Hammer)
         {
+            // 기존 망치 코드 유지
             if (handPosition != null)
             {
                 float progress = Mathf.Clamp01(currentInteractTimer / interactTime);
                 Quaternion targetRot = Quaternion.Euler(raiseAngle, 0, 0);
                 handPosition.localRotation = Quaternion.Slerp(Quaternion.identity, targetRot, progress);
             }
-        }
-        // 그 외
-        else
-        {
-            PlayToolAnimation(false);
         }
     }
 
@@ -262,13 +265,28 @@ public class PlayerInventory : MonoBehaviour
         Collider col = heldToolObject.GetComponent<Collider>();
         if (col != null) col.enabled = false;
 
+        SetLayerRecursively(heldToolObject, LayerMask.NameToLayer("Ignore Raycast"));
         Debug.Log($"도구 습득: {newTool.toolType}");
     }
 
-    public void DropTool()
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        if (obj == null) return;
+
+        obj.layer = newLayer; // 본체 변경
+
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            SetLayerRecursively(child.gameObject, newLayer); // 자식도 변경 (재귀)
+        }
+    }
+
+public void DropTool()
     {
         if (currentTool != ToolType.None && heldToolObject != null)
         {
+            SetLayerRecursively(heldToolObject, LayerMask.NameToLayer("Default"));
             heldToolObject.transform.SetParent(null);
             heldToolObject.SetActive(true);
 
@@ -315,4 +333,5 @@ public class PlayerInventory : MonoBehaviour
         ResetInteraction();
         if (handPosition != null) handPosition.localRotation = Quaternion.identity;
     }
+
 }

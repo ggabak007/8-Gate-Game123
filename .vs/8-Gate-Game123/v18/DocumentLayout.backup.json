@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|c:\\users\\soomi\\desktop\\8-gate-game123\\assets\\myscripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,7 +11,7 @@
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\anomalymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|c:\\users\\soomi\\desktop\\8-gate-game123\\assets\\myscripts\\anomalyobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\assets\\myscripts\\anomalyobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:assets\\myscripts\\anomalyobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -37,6 +37,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\UISettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0C95006A-4657-13AA-D206-19EBA8BD1876}|Assembly-CSharp.csproj|solutionrelative:Assets\\MyScripts\\UISettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\MyScripts\\PlayerInventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,8 +50,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\MyScripts\\GameManager.cs",
+              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\GameManager.cs",
+              "RelativeToolTip": "Assets\\MyScripts\\GameManager.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAgwC8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T15:40:46.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PlayerInventory.cs",
+              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs",
+              "RelativeDocumentMoniker": "Assets\\MyScripts\\PlayerInventory.cs",
+              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\PlayerInventory.cs",
+              "RelativeToolTip": "Assets\\MyScripts\\PlayerInventory.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T10:22:52.154Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -58,8 +88,7 @@
               "RelativeToolTip": "Assets\\MyScripts\\AnomalyObject.cs",
               "ViewState": "AgIAABoAAAAAAAAAAADwvyIAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-30T15:40:46.824Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-30T15:40:46.824Z"
             },
             {
               "$type": "Document",
@@ -71,8 +100,7 @@
               "RelativeToolTip": "Assets\\MyScripts\\AnomalyManager.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAA1wA0AAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-30T15:40:46.827Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-30T15:40:46.827Z"
             },
             {
               "$type": "Document",
@@ -112,19 +140,6 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GameManager.cs",
-              "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\GameManager.cs",
-              "RelativeDocumentMoniker": "Assets\\MyScripts\\GameManager.cs",
-              "ToolTip": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\GameManager.cs",
-              "RelativeToolTip": "Assets\\MyScripts\\GameManager.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAiwC8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-30T15:40:46.817Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 8,
               "Title": "UISettings.cs",
               "DocumentMoniker": "C:\\Users\\soomi\\Desktop\\8-Gate-Game123\\Assets\\MyScripts\\UISettings.cs",
@@ -145,8 +160,7 @@
               "RelativeToolTip": "Assets\\MyScripts\\Door.cs",
               "ViewState": "AgIAAC4AAAAAAAAAAAAUwDwAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-30T15:40:46.824Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-30T15:40:46.824Z"
             },
             {
               "$type": "Document",
