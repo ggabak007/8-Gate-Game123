@@ -27,16 +27,19 @@ public class UISettings : MonoBehaviour
         if (playerScript == null)
             playerScript = FindFirstObjectByType<PlayerMovement>();
 
-        // 4. 슬라이더 초기값 세팅
-        if (sensitivitySlider != null && playerScript != null)
-        {
-            sensitivitySlider.value = playerScript.mouseSensitivity;
-        }
+        // =========================================================
+        // [추가됨] 3. 메인 메뉴에서 저장된 설정값 불러오기 (핵심!)
+        // =========================================================
+        float savedSens = PlayerPrefs.GetFloat("Sensitivity", 100f); // 저장된 감도 (없으면 100)
+        float savedVol = PlayerPrefs.GetFloat("Volume", 1f);         // 저장된 소리 (없으면 1)
 
-        if (volumeSlider != null)
-        {
-            volumeSlider.value = AudioListener.volume;
-        }
+        // 슬라이더 UI 위치 맞추기
+        if (sensitivitySlider != null) sensitivitySlider.value = savedSens;
+        if (volumeSlider != null) volumeSlider.value = savedVol;
+
+        // 실제 게임(플레이어/소리)에 적용하기
+        if (playerScript != null) playerScript.mouseSensitivity = savedSens;
+        AudioListener.volume = savedVol;
     }
 
     void Update()
@@ -72,6 +75,8 @@ public class UISettings : MonoBehaviour
             // 마우스 커서 다시 중앙에 잠그고 숨기기
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            PlayerPrefs.Save();
         }
     }
 
@@ -82,12 +87,14 @@ public class UISettings : MonoBehaviour
         {
             playerScript.mouseSensitivity = val;
         }
+        PlayerPrefs.SetFloat("Sensitivity", val);
     }
 
     // [슬라이더 이벤트용] 소리 크기 조절
     public void SetVolume(float val)
     {
         AudioListener.volume = val;
+        PlayerPrefs.SetFloat("Volume", val);
     }
 
     // [버튼 이벤트용] 게임 종료
